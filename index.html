@@ -124,6 +124,7 @@
         <div class="stat-chip">店铺资金 <b id="hud-money">¥4,500</b></div>
         <div class="stat-chip rent">阶段房租目标 <b id="hud-rent">¥12,000</b></div>
         <div class="stat-chip">同好粉丝 <b id="hud-fans">320</b></div>
+        <button id="hud-voice-btn" class="hud-btn guide" onclick="toggleVoiceMute()">🔊 配音: 开启</button>
         <button class="hud-btn guide" onclick="toggleGuideModal(true)">📘 玩法指南</button>
         <button class="hud-btn" onclick="switchSideTab('chapters')">章节/结局直达</button>
         <button class="hud-btn" onclick="nextDay()">跳至次日 ⏭</button>
@@ -146,7 +147,13 @@
         <div class="gal-box">
           <div>
             <div class="gal-header">
-              <span class="gal-speaker" id="gal-speaker">旁白</span>
+              <div class="gal-header-left">
+                <span class="gal-speaker" id="gal-speaker">旁白</span>
+                <button id="gal-voice-btn" class="gal-voice-btn" onclick="replayCurrentVoice(event)" title="点击重播当前台词配音">
+                  <span class="voice-bars"><i></i><i></i><i></i></span>
+                  <span id="gal-voice-label">配音播放中</span>
+                </button>
+              </div>
               <span class="gal-tag" id="gal-tag"></span>
             </div>
             <div class="gal-text" id="gal-text">加载中…</div>

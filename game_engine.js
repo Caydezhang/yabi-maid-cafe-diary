@@ -15,7 +15,81 @@
     activeStory: null,
     lineIdx: 0,
     typingTimer: null,
-    wxReplied: false
+    wxReplied: false,
+    voiceMuted: false,
+    currentVoiceUrl: null
+  };
+
+  const voicePlayer = new Audio();
+  voicePlayer.preload = "auto";
+
+  function updateVoiceUi(isPlaying) {
+    const vBtn = document.getElementById("gal-voice-btn");
+    const vLabel = document.getElementById("gal-voice-label");
+    const hudBtn = document.getElementById("hud-voice-btn");
+    if (hudBtn) {
+      hudBtn.textContent = state.voiceMuted ? "🔇 配音: 静音" : "🔊 配音: 开启";
+    }
+    if (!vBtn || !vLabel) return;
+    if (!state.currentVoiceUrl) {
+      vBtn.style.display = "none";
+      return;
+    }
+    vBtn.style.display = "inline-flex";
+    if (state.voiceMuted) {
+      vBtn.classList.remove("playing");
+      vLabel.textContent = "已静音 (点击重播)";
+    } else if (isPlaying) {
+      vBtn.classList.add("playing");
+      vLabel.textContent = "配音播放中";
+    } else {
+      vBtn.classList.remove("playing");
+      vLabel.textContent = "重播语音";
+    }
+  }
+
+  voicePlayer.addEventListener("play", () => updateVoiceUi(true));
+  voicePlayer.addEventListener("ended", () => updateVoiceUi(false));
+  voicePlayer.addEventListener("pause", () => updateVoiceUi(false));
+
+  function playVoiceClip(url) {
+    state.currentVoiceUrl = url || null;
+    try {
+      voicePlayer.pause();
+      voicePlayer.currentTime = 0;
+    } catch (e) {}
+    if (!url || state.voiceMuted || state.mode === "title") {
+      updateVoiceUi(false);
+      return;
+    }
+    voicePlayer.src = url;
+    voicePlayer.play().catch(() => {
+      updateVoiceUi(false);
+    });
+  }
+
+  window.replayCurrentVoice = function (ev) {
+    if (ev) ev.stopPropagation();
+    if (state.voiceMuted) {
+      state.voiceMuted = false;
+    }
+    if (state.currentVoiceUrl) {
+      playVoiceClip(state.currentVoiceUrl);
+    }
+  };
+
+  window.toggleVoiceMute = function () {
+    state.voiceMuted = !state.voiceMuted;
+    if (state.voiceMuted) {
+      try {
+        voicePlayer.pause();
+      } catch (e) {}
+      updateVoiceUi(false);
+    } else if (state.currentVoiceUrl) {
+      playVoiceClip(state.currentVoiceUrl);
+    } else {
+      updateVoiceUi(false);
+    }
   };
 
   function curDay() {
@@ -149,6 +223,9 @@
     document.getElementById("gal-speaker").textContent = ln.speaker || "旁白";
     document.getElementById("gal-tag").textContent = ln.tag || "";
 
+    // Play neural TTS voice clip for this line
+    playVoiceClip(ln.voice || null);
+
     const textEl = document.getElementById("gal-text");
     if (state.typingTimer) clearInterval(state.typingTimer);
     textEl.textContent = "";
@@ -266,6 +343,9 @@
             speaker: "陆沉（店长）",
             sprites: ["luchen:normal", "kohaku:normal"],
             speaking: 0,
+            voice: restedNames.length
+              ? "game_assets/voices/sys_roster_rest.mp3"
+              : "game_assets/voices/sys_roster_all.mp3",
             text: restedNames.length
               ? `已批准【${restedNames.join("、")}】今日休假在家躺平，其体力疲劳与亚比精神压力已直接 100% 清零！现在请在右侧选择【① 上午 (10:00) 晨间训练】方案。`
               : "今日全员满状态出勤！现在请在右侧面板选择【① 上午 (10:00) 晨间训练】方案。"
@@ -336,6 +416,7 @@
               speaker: "白石零音",
               sprites: ["reine:normal", "mahiru:normal"],
               speaking: 0,
+              voice: "game_assets/voices/sys_evening_done.mp3",
               text: `今晚 B1 舞台演出结算完成，门票与酒水打赏共入账 ¥${earned}！现在是 21:30 打烊时间，请在右侧选择【下班社媒宣发】或触发【★ 21:30 留店独处剧情】。`
             }
           ]
@@ -364,25 +445,10 @@
       ch.bond = Math.min(100, ch.bond + 10);
     }
     state.wxReplied = true;
-    playStory(null, {
-      bg: "cafe1f",
-      loc: "深夜出租屋 · 微信私聊秒撤回互动",
-      sub: `${ch.name} 亚比精神压力 -${stressClear}% · 羁绊度上升`,
-      lines: [
-        {
-          speaker: "陆沉（微信回复）",
-          sprites: ["luchen:normal", `${cid}:${cid === "mahiru" ? "shy" : cid === "reine" ? "glasses" : "normal"}`],
-          speaking: 0,
-          text: `你回复 ${ch.name}：“${replyText}”`
-        },
-        {
-          speaker: ch.name,
-          sprites: ["luchen:normal", `${cid}:${cid === "mahiru" ? "shy" : cid === "reine" ? "glasses" : "normal"}`],
-          speaking: 1,
-          text: herResp
-        }
-      ]
-    });
+    const wxStoryKey = cid === "mahiru" ? "wx_mahiru_reply" : "wx_reine_reply";
+    if (S[wxStoryKey]) {
+      playStory(wxStoryKey);
+    }
     renderAll();
   };
 
@@ -405,10 +471,11 @@
       sub: d.specialHint,
       lines: [
         {
-          speaker: "早会提示",
-          sprites: ["luchen:normal", "kohaku:normal"],
+          speaker: "陈琥珀",
+          sprites: ["kohaku:normal", "luchen:normal"],
           speaking: 0,
-          text: `新的一天开始（${d.weekLabel}）！${d.specialHint}。\n请先在右侧【Step 0 反007排班】选择今天谁出勤、谁休息（休假直接清零体力疲劳与精神压力）。`
+          voice: "game_assets/voices/sys_new_day.mp3",
+          text: `“新的一天开始啦老板（${d.weekLabel}）！${d.specialHint}。先在右侧排班表上看看今天谁出勤、谁放假休息吧！”`
         }
       ]
     });
@@ -431,67 +498,10 @@
 
   window.triggerTrueEnd = function (cid) {
     state.mode = "game";
-    const endings = {
-      mahiru: {
-        bg: "rooftop3f",
-        loc: "3F · 跨年飘雪露台 · 零点烟花",
-        sub: "🌸 林真昼 True End ·《终身免检的备用钥匙》",
-        lines: [
-          {
-            speaker: "林真昼",
-            sprites: ["mahiru:shy", "luchen:normal"],
-            speaking: 0,
-            text: "（真昼裹着黑粉围巾，把冻凉的右手自然塞进你风衣口袋里，摸到那串备用钥匙与热草莓奶）“喂，陆沉。刚才楼下结年底总账的时候，我故意少算了五块钱哦。这样今年就只有99分，永远差一分才满分。”"
-          },
-          {
-            speaker: "林真昼",
-            sprites: ["mahiru:shy", "luchen:normal"],
-            speaking: 0,
-            text: "“我先说好哦——就算赢了对赌，我明年还是会赖床迟到，胃疼的时候脾气还是超级差。这么麻烦的零分次品，五、四、三、二、一……晚啦！零点超时了，终身不退不换了，笨蛋店长！”"
-          }
-        ]
-      },
-      reine: {
-        bg: "rooftop3f",
-        loc: "3F · 跨年飘雪露台 · 零点烟花",
-        sub: "🎸 白石零音 True End ·《第 0 号真话》",
-        lines: [
-          {
-            speaker: "白石零音",
-            sprites: ["reine:glasses", "luchen:normal"],
-            speaking: 0,
-            text: "（零音摘掉红美瞳换上500度黑框眼镜，把半边有线耳机塞进你右耳里，里面是木吉他清唱的《致陆沉》）“前三十七句‘最喜欢店长了’都是我在台上骗人的。今天这句是第0号——没加混响、没写进剧本，听不清算你活该！”"
-          }
-        ]
-      },
-      kohaku: {
-        bg: "rooftop3f",
-        loc: "3F · 跨年飘雪露台 · 零点烟花",
-        sub: "🐆 陈琥珀 True End ·《大姐头的专属橘子》",
-        lines: [
-          {
-            speaker: "陈琥珀",
-            sprites: ["kohaku:shy", "luchen:normal"],
-            speaking: 0,
-            text: "（琥珀踢掉厚底靴盘腿坐在藤椅上，看着蹲在面前帮她涂护手霜的你，眼圈微红却扬起下巴）“既然是你自己要把我惯成废人的，那你可得负责到底！以后累了就归你背，橘子也归你剥——快剥一瓣塞我嘴里！”"
-          }
-        ]
-      },
-      millie: {
-        bg: "rooftop3f",
-        loc: "3F · 跨年飘雪露台 · 零点烟花",
-        sub: "👾 苏千禧 True End ·《三次元的唯一存档点》",
-        lines: [
-          {
-            speaker: "苏千禧",
-            sprites: ["millie:happy", "luchen:normal"],
-            speaking: 0,
-            text: "（千禧摘下猫耳耳机，伸出小拇指轻轻勾住你的衬衫袖口，掌机屏幕上小幽灵正牵着咖啡杯店长）“陆沉……只要你的电源不拔掉，我就再也不会删档逃跑了。以后每一年的跨年，你都要在吧台给我留插座，好不好？”"
-          }
-        ]
-      }
-    };
-    playStory(null, endings[cid]);
+    const key = "true_end_" + cid;
+    if (S[key]) {
+      playStory(key);
+    }
   };
 
   // ==================== UI RENDERING ====================
