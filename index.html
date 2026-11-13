@@ -134,7 +134,7 @@
     <!-- Main Workspace -->
     <main class="workspace">
       <!-- Left Galgame & CG Visual Stage -->
-      <section class="stage-wrap" onclick="advanceDialogue()">
+      <section class="stage-wrap" onclick="onStageClick(event)">
         <img id="stage-bg" class="stage-bg" src="game_assets/bg_1f_maid_cafe.jpg" alt="场景背景">
         <div id="sprite-layer" class="sprite-layer"></div>
         <img id="stage-cg" class="stage-cg" src="" alt="剧情CG">
@@ -142,6 +142,10 @@
         <div class="stage-loc">
           <b id="loc-title">序章 · 逃离优绩塔尖与后巷的 404</b>
           <span id="loc-sub">10月06日 · 暴雨夜 · 在一切开始之前</span>
+        </div>
+        <div class="l2d-badge" title="WebGL2 实时骨骼网格 · 鼠标视线追踪 · 语音口型同步">
+          <span class="l2d-dot"></span>
+          <span>LIVE2D 2.5D · 视线追踪 &amp; 口型同步</span>
         </div>
 
         <div class="gal-box">
@@ -180,6 +184,8 @@
 
   <script src="game_data.js"></script>
   <script src="game_story.js"></script>
+  <script src="live2d_textures.js"></script>
+  <script src="live2d_stage.js"></script>
   <script src="game_engine.js"></script>
 </body>
 </html>

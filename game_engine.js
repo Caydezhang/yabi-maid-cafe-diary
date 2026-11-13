@@ -97,6 +97,9 @@
   }
 
   function init() {
+    if (window.LIVE2D_STAGE) {
+      window.LIVE2D_STAGE.init(".stage-wrap", voicePlayer);
+    }
     renderAll();
     // Pre-load prologue behind title screen
     playStory("prologue_story");
@@ -188,6 +191,7 @@
 
     const bgKey = ln.bg || st.bg || "cafe1f";
     if (D.backgrounds[bgKey]) bgEl.src = D.backgrounds[bgKey];
+    if (window.LIVE2D_STAGE) window.LIVE2D_STAGE.setScene(bgKey);
 
     // Only show full-screen CG if the current line explicitly specifies ln.cg (or if the story has st.cg and the line has no sprites)
     const cgKey = ln.cg || (!ln.sprites && st.cg) || null;
@@ -201,23 +205,30 @@
     locTitle.textContent = st.loc || "1F · 404 女仆喫茶";
     locSub.textContent = st.sub || curDay().weekLabel;
 
-    // Render transparent PNG sprites
+    // Render Live2D rigged models (plus DOM fallback if WebGL disabled)
     const spWrap = document.getElementById("sprite-layer");
     spWrap.innerHTML = "";
+    const l2dList = [];
     if (!cgKey && ln.sprites && ln.sprites.length) {
       ln.sprites.forEach((token, idx) => {
         const [cid, mood] = token.split(":");
         const ch = D.characters[cid];
         if (!ch) return;
         const src = (ch.sprites && ch.sprites[mood]) || ch.sprites.normal;
-        const img = document.createElement("img");
-        img.className = "sprite-item";
-        if (typeof ln.speaking === "number") {
-          img.classList.add(ln.speaking === idx ? "speaking" : "dim");
+        l2dList.push({ cid, mood: mood || "normal", src });
+        if (!window.LIVE2D_STAGE || !window.LIVE2D_STAGE.enabled) {
+          const img = document.createElement("img");
+          img.className = "sprite-item";
+          if (typeof ln.speaking === "number") {
+            img.classList.add(ln.speaking === idx ? "speaking" : "dim");
+          }
+          img.src = src;
+          spWrap.appendChild(img);
         }
-        img.src = src;
-        spWrap.appendChild(img);
       });
+    }
+    if (window.LIVE2D_STAGE && window.LIVE2D_STAGE.enabled) {
+      window.LIVE2D_STAGE.setCharacters(l2dList, ln.speaking, !!cgKey);
     }
 
     document.getElementById("gal-speaker").textContent = ln.speaker || "旁白";
@@ -276,6 +287,13 @@
     const prog = document.getElementById("gal-progress");
     prog.textContent = `剧情进度 ${state.lineIdx + 1} / ${st.lines.length}`;
   }
+
+  window.onStageClick = function (ev) {
+    if (window.LIVE2D_STAGE && ev) {
+      window.LIVE2D_STAGE.triggerTapBounce(ev.clientX, ev.clientY);
+    }
+    window.advanceDialogue();
+  };
 
   window.advanceDialogue = function () {
     const st = state.activeStory;
