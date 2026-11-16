@@ -17,7 +17,28 @@
     typingTimer: null,
     wxReplied: false,
     voiceMuted: false,
-    currentVoiceUrl: null
+    currentVoiceUrl: null,
+    stageView: "l2d" // "3d" | "l2d"
+  };
+
+  function applyStageView(viewMode) {
+    state.stageView = viewMode;
+    const is3d = viewMode === "3d" && !!window.CAFE_SIM_3D;
+    const stageWrap = document.querySelector(".stage-wrap");
+    if (stageWrap) stageWrap.classList.toggle("sim3d-mode", is3d);
+    if (window.CAFE_SIM_3D) {
+      window.CAFE_SIM_3D.setVisible(is3d);
+      if (is3d) window.CAFE_SIM_3D.syncWithGameState(state, D);
+    }
+    const b3d = document.getElementById("btn-view-3d");
+    const bl2d = document.getElementById("btn-view-l2d");
+    if (b3d) b3d.classList.toggle("active", is3d);
+    if (bl2d) bl2d.classList.toggle("active", !is3d);
+  }
+
+  window.switchStageView = function (viewMode, ev) {
+    if (ev) ev.stopPropagation();
+    applyStageView(viewMode);
   };
 
   const voicePlayer = new Audio();
@@ -97,9 +118,13 @@
   }
 
   function init() {
+    if (window.CAFE_SIM_3D) {
+      window.CAFE_SIM_3D.init(".stage-wrap");
+    }
     if (window.LIVE2D_STAGE) {
       window.LIVE2D_STAGE.init(".stage-wrap", voicePlayer);
     }
+    applyStageView("l2d");
     renderAll();
     // Pre-load prologue behind title screen
     playStory("prologue_story");
@@ -114,6 +139,7 @@
       state.mode = "prologue";
       state.tutorialStep = 0;
       state.unlockedDossiers = ["luchen"];
+      applyStageView("l2d");
       playStory("prologue_story");
       renderAll();
     } else if (modeType === "tutorial") {
@@ -123,6 +149,7 @@
       state.tutorialStep = 1;
       state.sideTab = "ops";
       playStory("opening_day");
+      applyStageView("3d");
       renderAll();
     } else {
       // sandbox
@@ -132,6 +159,7 @@
       state.tutorialStep = 0;
       state.sideTab = "ops";
       playStory("opening_day");
+      applyStageView("3d");
       renderAll();
     }
   };
@@ -151,6 +179,7 @@
     D.characters.mahiru.stress = 68;
     D.characters.mahiru.onDuty = true;
     playStory("opening_day");
+    applyStageView("3d");
     renderAll();
   };
 
@@ -198,6 +227,8 @@
     if (cgKey && D.cgs[cgKey]) {
       cgEl.src = D.cgs[cgKey];
       cgEl.classList.add("show");
+      // Automatically reveal dramatic full-screen CGs (can still toggle back anytime)
+      if (state.stageView === "3d") applyStageView("l2d");
     } else {
       cgEl.classList.remove("show");
     }
@@ -325,6 +356,7 @@
     if (state.phase !== "roster") return;
     const ch = D.characters[cid];
     ch.onDuty = !ch.onDuty;
+    if (window.CAFE_SIM_3D) window.CAFE_SIM_3D.syncWithGameState(state, D);
     renderAll();
   };
 
@@ -340,9 +372,10 @@
     });
     state.phase = "morning";
     if (state.tutorialStep === 1) state.tutorialStep = 2;
-    renderAll();
-
     const day = curDay();
+    const isMajorCgDay = ["typhoon_kohaku", "break_badge", "reine_rebel", "new_year_finale"].includes(day.specialId);
+    applyStageView(isMajorCgDay ? "l2d" : "3d");
+    renderAll();
     if (day.specialId === "typhoon_kohaku") {
       playStory("typhoon_kohaku");
     } else if (day.specialId === "break_badge") {
@@ -382,6 +415,7 @@
       .map((id) => D.characters[id])
       .filter((c) => c.onDuty);
 
+    const executedPhase = state.phase;
     if (state.phase === "morning") {
       activeChars.forEach((c) => {
         if (opt.stat && typeof c[opt.stat] === "number") {
@@ -392,6 +426,8 @@
       });
       state.phase = "afternoon";
       if (state.tutorialStep === 2) state.tutorialStep = 3;
+      applyStageView("3d");
+      if (window.CAFE_SIM_3D) window.CAFE_SIM_3D.syncWithGameState({ ...state, phase: "morning" }, D, optId);
       if (opt.storyKey && S[opt.storyKey]) playStory(opt.storyKey);
     } else if (state.phase === "afternoon") {
       const avgSkill =
@@ -406,6 +442,8 @@
       });
       state.phase = "evening";
       if (state.tutorialStep === 3) state.tutorialStep = 4;
+      applyStageView("3d");
+      if (window.CAFE_SIM_3D) window.CAFE_SIM_3D.syncWithGameState({ ...state, phase: "afternoon" }, D, optId);
       if (opt.storyKey && S[opt.storyKey]) playStory(opt.storyKey);
     } else if (state.phase === "evening") {
       const avgStage =
@@ -422,6 +460,8 @@
       state.phase = "night";
       state.wxReplied = false;
       if (state.tutorialStep === 4) state.tutorialStep = 5;
+      applyStageView("3d");
+      if (window.CAFE_SIM_3D) window.CAFE_SIM_3D.syncWithGameState({ ...state, phase: "evening" }, D, optId);
       if (opt.storyKey && S[opt.storyKey]) {
         playStory(opt.storyKey);
       } else {
@@ -447,6 +487,7 @@
         c.stress = Math.max(0, c.stress + (opt.stressDelta || -15));
         c.bond = Math.min(100, c.bond + 8);
       });
+      applyStageView("l2d"); // Switch back to intimate Live2D / CG stage for late-night story & WeChat!
       if (opt.storyKey && S[opt.storyKey]) {
         playStory(opt.storyKey);
       }
@@ -463,6 +504,7 @@
       ch.bond = Math.min(100, ch.bond + 10);
     }
     state.wxReplied = true;
+    applyStageView("l2d");
     const wxStoryKey = cid === "mahiru" ? "wx_mahiru_reply" : "wx_reine_reply";
     if (S[wxStoryKey]) {
       playStory(wxStoryKey);
@@ -481,6 +523,7 @@
     state.phase = "roster";
     state.sideTab = "ops";
     state.wxReplied = false;
+    applyStageView("3d");
     renderAll();
     const d = curDay();
     playStory(null, {
@@ -516,6 +559,7 @@
 
   window.triggerTrueEnd = function (cid) {
     state.mode = "game";
+    applyStageView("l2d");
     const key = "true_end_" + cid;
     if (S[key]) {
       playStory(key);
