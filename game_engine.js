@@ -44,12 +44,116 @@
   const voicePlayer = new Audio();
   voicePlayer.preload = "auto";
 
+  // ==================== FLOATING (!) TOOLTIP ENGINE ====================
+  function escAttr(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function infoTip(title, text) {
+    const tAttr = title ? ` data-tip-title="${escAttr(title)}"` : "";
+    return `<span class="info-tip" onclick="event.stopPropagation()"${tAttr} data-tip="${escAttr(text)}">!</span>`;
+  }
+
+  function initTooltipSystem() {
+    let tipEl = document.getElementById("global-tooltip");
+    if (!tipEl) {
+      tipEl = document.createElement("div");
+      tipEl.id = "global-tooltip";
+      document.body.appendChild(tipEl);
+    }
+
+    let activeTrigger = null;
+
+    function positionTooltip(clientX, clientY, anchorEl) {
+      const pad = 12;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const rect = tipEl.getBoundingClientRect();
+      const w = rect.width || 240;
+      const h = rect.height || 80;
+
+      let x = clientX + 14;
+      let y = clientY + 14;
+
+      if (anchorEl && (clientX === 0 && clientY === 0)) {
+        const ar = anchorEl.getBoundingClientRect();
+        x = ar.left;
+        y = ar.bottom + 8;
+      }
+
+      if (x + w + pad > vw) {
+        x = Math.max(pad, clientX - w - 14);
+      }
+      if (y + h + pad > vh) {
+        y = Math.max(pad, clientY - h - 14);
+      }
+      tipEl.style.left = Math.round(x) + "px";
+      tipEl.style.top = Math.round(y) + "px";
+    }
+
+    function showTip(el, cx, cy) {
+      const text = el.getAttribute("data-tip");
+      if (!text) return;
+      const title = el.getAttribute("data-tip-title");
+      activeTrigger = el;
+      el.classList.add("active");
+      tipEl.innerHTML =
+        (title ? `<span class="tip-title">${escAttr(title)}</span>` : "") +
+        escAttr(text).replace(/\\n/g, "\n");
+      tipEl.classList.add("show");
+      positionTooltip(cx, cy, el);
+    }
+
+    function hideTip() {
+      if (activeTrigger) activeTrigger.classList.remove("active");
+      activeTrigger = null;
+      tipEl.classList.remove("show");
+    }
+    window._hideGlobalTooltip = hideTip;
+
+    document.addEventListener("mouseover", (e) => {
+      const el = e.target && e.target.closest ? e.target.closest(".info-tip[data-tip]") : null;
+      if (el) showTip(el, e.clientX, e.clientY);
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (activeTrigger && tipEl.classList.contains("show")) {
+        positionTooltip(e.clientX, e.clientY, activeTrigger);
+      }
+    });
+
+    document.addEventListener("mouseout", (e) => {
+      const el = e.target && e.target.closest ? e.target.closest(".info-tip[data-tip]") : null;
+      if (el && el === activeTrigger) {
+        hideTip();
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      const el = e.target && e.target.closest ? e.target.closest(".info-tip[data-tip]") : null;
+      if (el) {
+        e.stopPropagation();
+        if (activeTrigger === el && tipEl.classList.contains("show")) {
+          hideTip();
+        } else {
+          showTip(el, e.clientX, e.clientY);
+        }
+      } else if (activeTrigger) {
+        hideTip();
+      }
+    });
+  }
+
   function updateVoiceUi(isPlaying) {
     const vBtn = document.getElementById("gal-voice-btn");
     const vLabel = document.getElementById("gal-voice-label");
     const hudBtn = document.getElementById("hud-voice-btn");
     if (hudBtn) {
-      hudBtn.textContent = state.voiceMuted ? "🔇 配音: 静音" : "🔊 配音: 开启";
+      hudBtn.textContent = state.voiceMuted ? "🔇 静音" : "🔊 配音";
     }
     if (!vBtn || !vLabel) return;
     if (!state.currentVoiceUrl) {
@@ -59,13 +163,13 @@
     vBtn.style.display = "inline-flex";
     if (state.voiceMuted) {
       vBtn.classList.remove("playing");
-      vLabel.textContent = "已静音 (点击重播)";
+      vLabel.textContent = "已静音";
     } else if (isPlaying) {
       vBtn.classList.add("playing");
-      vLabel.textContent = "配音播放中";
+      vLabel.textContent = "配音中";
     } else {
       vBtn.classList.remove("playing");
-      vLabel.textContent = "重播语音";
+      vLabel.textContent = "重播";
     }
   }
 
@@ -118,6 +222,7 @@
   }
 
   function init() {
+    initTooltipSystem();
     if (window.CAFE_SIM_3D) {
       window.CAFE_SIM_3D.init(".stage-wrap");
     }
@@ -284,7 +389,7 @@
     choicesEl.innerHTML = "";
 
     if (ln.choices && ln.choices.length) {
-      nextHintEl.textContent = "▲ 请在上方选择你的回应";
+      nextHintEl.textContent = "▲ 请选择回应";
       ln.choices.forEach((ch) => {
         const btn = document.createElement("button");
         btn.className = "gal-choice-btn";
@@ -297,10 +402,10 @@
         choicesEl.appendChild(btn);
       });
     } else if (ln.isPrologueEnd) {
-      nextHintEl.textContent = "▲ 点击上方按钮正式开启第一天试营业";
+      nextHintEl.textContent = "▲ 点击开启首日试营业";
       const btn = document.createElement("button");
       btn.className = "gal-choice-btn";
-      btn.textContent = "▶ 签下对赌协议 · 开启首日试营业（进入 6 步实机教学）";
+      btn.textContent = "▶ 签下对赌协议 · 开启首日试营业";
       btn.onclick = function (ev) {
         ev.stopPropagation();
         window.finishPrologueToTutorial();
@@ -309,14 +414,14 @@
     } else {
       nextHintEl.textContent =
         state.lineIdx < st.lines.length - 1
-          ? "▼ 点击画面继续下一句对话"
+          ? "▼ 点击继续"
           : state.mode === "prologue"
-          ? "▼ 点击画面进入试营业教学"
-          : "▼ 本段对话已读完 · 请在右侧面板点选经营操作";
+          ? "▼ 点击进入教学"
+          : "▶ 请在右侧操作";
     }
 
     const prog = document.getElementById("gal-progress");
-    prog.textContent = `剧情进度 ${state.lineIdx + 1} / ${st.lines.length}`;
+    prog.textContent = `${state.lineIdx + 1} / ${st.lines.length}`;
   }
 
   window.onStageClick = function (ev) {
@@ -387,8 +492,8 @@
     } else {
       playStory(null, {
         bg: "cafe1f",
-        loc: "1F · 早会考勤完毕 · 进入①上午训练",
-        sub: "反 007 轮休生效 · 休假人员负面状态已 100% 清零",
+        loc: "1F · 考勤完毕 · 进入①训练",
+        sub: restedNames.length ? `${restedNames.join("、")} 休假（状态已清零）` : "全员满状态出勤",
         lines: [
           {
             speaker: "陆沉（店长）",
@@ -398,8 +503,8 @@
               ? "game_assets/voices/sys_roster_rest.mp3"
               : "game_assets/voices/sys_roster_all.mp3",
             text: restedNames.length
-              ? `已批准【${restedNames.join("、")}】今日休假在家躺平，其体力疲劳与亚比精神压力已直接 100% 清零！现在请在右侧选择【① 上午 (10:00) 晨间训练】方案。`
-              : "今日全员满状态出勤！现在请在右侧面板选择【① 上午 (10:00) 晨间训练】方案。"
+              ? `【${restedNames.join("、")}】今日休假，疲劳与压力已清零！请在右侧选择上午训练方案。`
+              : "今日全员出勤！请在右侧选择上午训练方案。"
           }
         ]
       });
@@ -467,15 +572,15 @@
       } else {
         playStory(null, {
           bg: "liveB1",
-          loc: "B1 · 地下 Livehouse 演出圆满落幕",
-          sub: `晚场票房入账 +¥${earned} · 进入④下班社媒与留店选择`,
+          loc: "B1 · 演出落幕",
+          sub: `票房 +¥${earned} · 进入④夜生活`,
           lines: [
             {
               speaker: "白石零音",
               sprites: ["reine:normal", "mahiru:normal"],
               speaking: 0,
               voice: "game_assets/voices/sys_evening_done.mp3",
-              text: `今晚 B1 舞台演出结算完成，门票与酒水打赏共入账 ¥${earned}！现在是 21:30 打烊时间，请在右侧选择【下班社媒宣发】或触发【★ 21:30 留店独处剧情】。`
+              text: `今晚票房入账 ¥${earned}！已到 21:30 打烊时间，请在右侧选择社媒宣发或留店剧情。`
             }
           ]
         });
@@ -529,14 +634,14 @@
     playStory(null, {
       bg: "cafe1f",
       loc: d.weekLabel + " · " + d.title,
-      sub: d.specialHint,
+      sub: d.shortHint || d.specialHint,
       lines: [
         {
           speaker: "陈琥珀",
           sprites: ["kohaku:normal", "luchen:normal"],
           speaking: 0,
           voice: "game_assets/voices/sys_new_day.mp3",
-          text: `“新的一天开始啦老板（${d.weekLabel}）！${d.specialHint}。先在右侧排班表上看看今天谁出勤、谁放假休息吧！”`
+          text: `“早安老板！今天是 ${d.weekLabel}（${d.shortHint || d.title}），先在右侧排班吧！”`
         }
       ]
     });
@@ -575,34 +680,37 @@
     return `
       <div class="tutorial-banner">
         <div class="tutorial-head">
-          <span class="tutorial-badge">${t.step}</span>
-          <button class="tutorial-skip" onclick="skipTutorial()">跳过引导 ✕</button>
+          <span class="tutorial-head-left">
+            <span class="tutorial-badge">${t.step}</span>
+            ${infoTip(t.step, t.detail || t.body || "")}
+          </span>
+          <button class="tutorial-skip" onclick="skipTutorial()">跳过 ✕</button>
         </div>
         <b>${t.title}</b>
-        <p style="white-space:pre-line">${t.body}</p>
       </div>`;
   }
 
   function renderAll() {
+    if (window._hideGlobalTooltip) window._hideGlobalTooltip();
     const d = curDay();
     document.getElementById("hud-day").textContent =
-      state.mode === "prologue" ? "序章 · 接手前夜 (10/06)" : d.weekLabel;
+      state.mode === "prologue" ? "序章 · 10/06" : d.weekLabel;
     document.getElementById("hud-money").textContent = "¥" + state.money.toLocaleString();
     document.getElementById("hud-rent").textContent = "¥" + d.rentGoal.toLocaleString();
     document.getElementById("hud-fans").textContent = state.fans.toLocaleString();
 
     const phases = [
-      { id: "roster", label: "0.反007排班" },
-      { id: "morning", label: "①上午训练" },
-      { id: "afternoon", label: "②下午点餐拍切" },
-      { id: "evening", label: "③晚上演出" },
-      { id: "night", label: "④下班社媒/夜生活" }
+      { id: "roster", label: "0.排班" },
+      { id: "morning", label: "①训练" },
+      { id: "afternoon", label: "②午市" },
+      { id: "evening", label: "③演出" },
+      { id: "night", label: "④夜生活" }
     ];
     const pOrder = phases.map((p) => p.id);
     const curIdx = state.mode === "prologue" ? -1 : pOrder.indexOf(state.phase);
     document.getElementById("hud-phases").innerHTML =
       state.mode === "prologue"
-        ? `<span class="phase-pill active">🎬 序章剧情模式（阅读完左侧剧情后解锁店铺经营）</span>`
+        ? `<span class="phase-pill active">🎬 序章剧情中</span>`
         : phases
             .map(
               (p, i) =>
@@ -636,10 +744,12 @@
           <img class="char-avatar" src="${c.avatar}" alt="${c.name}">
           <div class="char-meta">
             <div class="char-top">
-              <b>${c.name}</b>
+              <span class="char-name-row">
+                <b>${c.name}</b>
+                ${infoTip(c.name + " · 档案", c.styleDesc || "")}
+              </span>
               <span class="skill-pill"><em>${c.tag}</em></span>
             </div>
-            <p style="font-size:11.5px;color:#b8aec8;line-height:1.45">${c.styleDesc || ""}</p>
           </div>
         </div>`;
       })
@@ -648,17 +758,26 @@
     body.innerHTML = `
       <div class="tutorial-banner">
         <div class="tutorial-head">
-          <span class="tutorial-badge">序章 · 沉浸叙事模式</span>
+          <span class="tutorial-head-left">
+            <span class="tutorial-badge">序章剧情</span>
+            ${infoTip("序章说明", "点击左侧画面推进雨夜接手 404 喫茶的开篇剧情，下方将随出场逐一解锁人物档案；读完自动进入首日 6 步经营教学。")}
+          </span>
           <button class="tutorial-skip" onclick="finishPrologueToTutorial()">跳过序章 ▶</button>
         </div>
-        <b>欢迎来到《拯救亚比妹妹——仆咖经营日记》</b>
-        <p>• 当前为【序章剧情】阶段：请点击左侧画面阅读陆沉从大厂裸辞、雨夜接手 404 喫茶并与四位亚比妹妹初遇的故事。\n• 随剧情推进，下方会逐一解锁登场人物档案；读完序章后将进入【首日手把手经营教学】！</p>
+        <b>点击左侧推进剧情，逐一解锁店员档案</b>
       </div>
-      <div style="font-size:12px;color:#e9c76d;font-weight:700">📂 已解锁登场人物档案 (${state.unlockedDossiers.length} / 5)</div>
+      <div class="section-head">📂 人物档案 (${state.unlockedDossiers.length} / 5) ${infoTip("人物档案", "鼠标悬停各角色名字旁的感叹号可查看详细背景设定。")}</div>
       ${cardsHtml}
       <button class="op-btn special" style="text-align:center;margin-top:auto" onclick="finishPrologueToTutorial()">
-        <b>⚡ 跳过序章剧情 · 直接开始首日试营业教学</b>
+        <b>⚡ 跳过序章 · 直接进入首日教学</b>
       </button>`;
+  }
+
+  function renderChips(chips) {
+    if (!chips || !chips.length) return "";
+    return `<div class="op-chips">${chips
+      .map((c) => `<span class="chip ${c.tone || ""}">${c.text}</span>`)
+      .join("")}</div>`;
   }
 
   function renderOpsTab(body, d) {
@@ -669,23 +788,29 @@
         const c = D.characters[cid];
         const highStress = c.stress >= 60 || c.fatigue >= 60;
         const highlightCard = state.tutorialStep === 1 && cid === "mahiru" ? "tut-highlight" : "";
+        const shortRole = (c.tag.split("·")[1] || c.tag).trim();
+        const charDetail = `${c.styleDesc}\n\n• 美食 ${c.food} ｜ 饭撒 ${c.charm}\n• 唱跳 ${c.stage} ｜ 社媒 ${c.social}\n• 羁绊 ${c.bond}%（休假可当日一键清零疲劳与压力）`;
         return `
         <div class="char-card ${!c.onDuty ? "resting" : highStress ? "warn" : ""} ${highlightCard}">
           <img class="char-avatar" src="${c.avatar}" alt="${c.name}">
           <div class="char-meta">
             <div class="char-top">
-              <b>${c.name} <span style="font-size:11px;color:#b8aec8;font-weight:400">${c.tag}</span></b>
+              <span class="char-name-row">
+                <b>${c.name}</b>
+                <span class="char-role">${shortRole}</span>
+                ${infoTip(c.name + " · " + shortRole, charDetail)}
+              </span>
               <button class="duty-btn ${c.onDuty ? "work" : "rest"}" onclick="toggleDuty('${cid}')">
-                ${c.onDuty ? "今日出勤" : "★休假(双清零)"}
+                ${c.onDuty ? "出勤" : "★休假"}
               </button>
             </div>
             <div class="bars-row">
               <div class="mini-bar">
-                🔵 体力疲劳 ${c.fatigue}%
+                🔵 疲劳 ${c.fatigue}%
                 <div class="track"><div class="fill" style="width:${c.fatigue}%;background:#70b5ff"></div></div>
               </div>
               <div class="mini-bar">
-                🌸 亚比精神压力 ${c.stress}%
+                🌸 压力 ${c.stress}%
                 <div class="track"><div class="fill" style="width:${c.stress}%;background:${c.stress >= 60 ? "#ff4d6a" : "#ff5f91"}"></div></div>
               </div>
             </div>
@@ -703,37 +828,61 @@
     let actionBox = "";
     if (state.phase === "roster") {
       const btnHighlight = state.tutorialStep === 1 ? "tut-highlight" : "";
+      const rosterTip = "每天早会可自由切换任意妹妹为【★休假】，休假者当天体力疲劳与精神压力直接 100% 清零！\n\n提示：真昼当前压力较高，可先放假或带她出勤并在晚间留店安慰。";
       actionBox = `
         <div class="op-box">
-          <div class="op-title">Step 0 · 反 007 考勤排班（点击下方卡片切换出勤/休假）</div>
-          <p style="font-size:12px;color:#b8aec8;margin-bottom:10px;line-height:1.5">
-            ${d.specialHint}<br>提示：真昼昨晚熬夜算账精神压力已达 68%，可点她卡片右上角设为【休假】一键清零，或带她出勤并在下班留店安慰她！
-          </p>
+          <div class="op-title">
+            <span class="op-title-left">0. 今日排班 ${infoTip("反 007 排班说明", rosterTip)}</span>
+            <span class="chip green">休假双清零</span>
+          </div>
+          <div class="day-event-bar">
+            <span>${d.shortHint || d.title}</span>
+            ${infoTip(d.weekLabel + " · 今日日程", d.specialHint)}
+          </div>
           <button id="btn-confirm-roster" class="op-btn special ${btnHighlight}" style="width:100%;text-align:center" onclick="confirmRoster()">
-            <b>▶ 确认今日出勤名单 · 开启一日四时段运营</b>
+            <b>▶ 确认出勤名单 · 开始营业</b>
           </button>
         </div>`;
     } else {
       const opts = (D.periodOptions[state.phase] || []).filter(
         (o) => !o.specialFor || o.specialFor === d.specialId
       );
-      const titles = {
-        morning: "① 上午 (10:00) · 选择晨间训练与备场方案",
-        afternoon: "② 下午 (14:00) · 选择点餐+拍切营业重心",
-        evening: "③ 晚上 (19:00) · 选择 B1 舞台演出方案",
-        night: "④ 下班 (22:00) · 社媒运营引流 & 留店剧情"
+      const phaseMeta = {
+        morning: {
+          title: "① 上午训练 (10:00)",
+          tip: "闭店备场时段：快速提升全队四维技能，触发双人师徒搭档小剧场与专属 CG。"
+        },
+        afternoon: {
+          title: "② 下午营业 (14:00)",
+          tip: "午市赚钱主力：1F 点餐吃美食力（稳赚不涨压力），2F 拍切吃饭撒力（暴利但涨精神压力）。"
+        },
+        evening: {
+          title: "③ 晚上演出 (19:00)",
+          tip: "B1 地下舞台：按唱跳力结算票房与粉丝，全员燃曲 Live 还能宣泄白天压力！"
+        },
+        night: {
+          title: "④ 夜生活 (22:00)",
+          tip: "发社媒为明日加成 +35%~45% 收益；点选金色 ★ 留店剧情可彻底清零妹妹压力并看全屏 CG！"
+        }
       };
+      const meta = phaseMeta[state.phase] || { title: "经营决策", tip: "" };
       const listHighlight = state.tutorialStep >= 2 && state.tutorialStep <= 5 ? "tut-highlight" : "";
       actionBox = `
         <div class="op-box ${listHighlight}">
-          <div class="op-title">${titles[state.phase]}</div>
+          <div class="op-title">
+            <span class="op-title-left">${meta.title} ${infoTip(meta.title, meta.tip)}</span>
+            ${state.nextBuff > 1 ? `<span class="chip gold">客流 ×${state.nextBuff.toFixed(2)}</span>` : ""}
+          </div>
           <div class="op-list">
             ${opts
               .map(
                 (o) => `
               <button class="op-btn ${o.name.includes("★") ? "special" : ""}" onclick="runOption('${o.id}')">
-                <b>${o.name}</b>
-                <span>${o.desc}</span>
+                <div class="op-btn-row">
+                  <b>${o.name}</b>
+                  ${infoTip(o.name, o.desc)}
+                </div>
+                ${renderChips(o.chips)}
               </button>`
               )
               .join("")}
@@ -741,10 +890,11 @@
         </div>`;
     }
 
+    const staffTip = "点击右上角【出勤 / ★休假】仅在 Step 0 排班阶段可切换。\n• 🔵 疲劳：干活与唱跳累积\n• 🌸 压力：2F 拍切假笑营业累积\n• 四维技能决定对应时段收益与演出评分";
     body.innerHTML =
       tutBanner +
       actionBox +
-      `<div style="font-size:12px;color:#867a99;font-weight:700">店员状态与四维技能面板（点击右上角切换出勤/休假）</div>` +
+      `<div class="section-head">店员状态 ${infoTip("店员面板说明", staffTip)}</div>` +
       charHtml;
   }
 
@@ -756,35 +906,46 @@
     body.innerHTML = `
       ${tutBanner}
       <div class="phone-card">
-        <div class="op-title">📱 小红书 (RED) · 妹妹夜间营业笔记</div>
+        <div class="op-title">
+          <span class="op-title-left">📱 小红书 · 夜间动态 ${infoTip("小红书动态", "妹妹们下班后发布的营业笔记与暗戳戳的日常切片。")}</span>
+        </div>
         <div class="red-post">
           <img src="game_assets/cg_mahiru_rainy_night.jpg" alt="小红书配图">
           <div class="red-body">
-            <b style="color:#ff8fb0">@林真昼_Mahiru</b> · 00:18 发布<br>
-            今天2F拍切排到楼梯口啦，手腕都画酸了呢~（第9张角落不小心拍到了店长热的温草莓奶）<br>
-            <span style="color:#867a99">#地雷系 #404女仆喫茶 #地下偶像</span>
+            <b style="color:#ff8fb0">@林真昼_Mahiru</b> · 00:18<br>
+            今天拍切排到楼梯口啦，手腕画酸了~（角落不小心拍到店长热的草莓奶）<br>
+            <span style="color:#867a99">#地雷系 #404女仆喫茶</span>
           </div>
         </div>
       </div>
 
       <div id="wx-reply-box" class="phone-card ${wxHighlight}">
-        <div class="op-title">💬 微信私聊 · 半夜秒撤回消息（点击回复帮她消除精神压力）</div>
+        <div class="op-title">
+          <span class="op-title-left">💬 微信私聊 ${infoTip("微信秒撤回减压", "白天攒了压力的妹妹半夜会发疯又秒撤回。选懂她电波的回复可立消 -35% 精神压力并大幅提升羁绊！")}</span>
+          <span class="chip green">回复减压 -35%</span>
+        </div>
         <div class="wx-bubble recall">“真昼🍓” 撤回了一条消息 (01:15)</div>
-        <div class="wx-bubble"><b>真昼🍓：</b>今天最后那个客人非说我画的歪嘴猫不如隔壁店的圆……算了，反正我只会左手乱涂鸦，明天把拍切岗换给别人吧。</div>
+        <div class="wx-bubble"><b>真昼🍓：</b>刚才有客人说我画的歪嘴猫不如隔壁圆……明天拍切换别人吧。</div>
         <div class="op-list" style="margin-top:8px">
           <button class="op-btn special" onclick="replyWeChat('mahiru', 35, '他眼神不好。你画的那张歪嘴猫我刚拿相框裱起来挂收银台正中间了，本店镇店非卖品。', '“……你有病吧挂那个干嘛！丑死了，明天早上我去换张画得更好看的挂上去！睡觉了不理你了！”（真昼精神压力 -35%）')">
-            <b>▶ 回复真昼（懂她接梗 · 精神压力 -35%）</b>
-            <span>“你画的那张歪嘴猫我裱起来挂收银台了，本店镇店非卖品。”</span>
+            <div class="op-btn-row">
+              <b>▶ 回复真昼：把歪嘴猫裱起来</b>
+              ${infoTip("回复内容预览", "“他眼神不好。你画的那张歪嘴猫我刚拿相框裱起来挂收银台正中间了，本店镇店非卖品。”")}
+            </div>
+            <div class="op-chips"><span class="chip green">真昼压力 -35%</span><span class="chip pink">羁绊 +10</span></div>
           </button>
           <button class="op-btn" onclick="replyWeChat('reine', 35, '大晚上别戴着500度近视眼镜摸黑找糖罐。在出租屋等着，我刚煮了热可可挂你门把手上。', '“……谁让你送了。少放半勺糖，到了敲两下门就行，我没化妆不开门。”（零音精神压力 -35%）')">
-            <b>▶ 回复零音（深夜送热可可 · 精神压力 -35%）</b>
-            <span>“别戴着500度眼镜摸黑下楼，热可可五分钟后挂你门把手上。”</span>
+            <div class="op-btn-row">
+              <b>▶ 回复零音：深夜送热可可</b>
+              ${infoTip("回复内容预览", "“大晚上别戴着500度近视眼镜摸黑找糖罐。在出租屋等着，我刚煮了热可可挂你门把手上。”")}
+            </div>
+            <div class="op-chips"><span class="chip green">零音压力 -35%</span><span class="chip pink">羁绊 +10</span></div>
           </button>
         </div>
       </div>
 
-      <button class="op-btn special ${sleepHighlight}" style="text-align:center;padding:12px" onclick="nextDay()">
-        <b>🌙 关灯睡觉 · 进入下一天日程 ${state.tutorialStep === 6 ? "（完成新手教学！）" : ""}</b>
+      <button class="op-btn special ${sleepHighlight}" style="text-align:center;padding:11px" onclick="nextDay()">
+        <b>🌙 关灯睡觉 · 进入次日 ${state.tutorialStep === 6 ? "（完成教学）" : ""}</b>
       </button>`;
   }
 
@@ -793,31 +954,41 @@
       .map(
         (c, idx) => `
         <button class="op-btn ${idx === state.dayIdx && state.mode === "game" ? "special" : ""}" onclick="jumpToDay(${idx})">
-          <b>${c.weekLabel} · ${c.title}</b>
-          <span>${c.specialHint}</span>
+          <div class="op-btn-row">
+            <b>${c.weekLabel} · ${c.title}</b>
+            ${infoTip(c.title, c.specialHint)}
+          </div>
         </button>`
       )
       .join("");
 
     body.innerHTML = `
       <div class="op-box">
-        <div class="op-title">🎬 重新体验序章与新手引导</div>
+        <div class="op-title"><span class="op-title-left">🎬 序章与教学</span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-          <button class="op-btn special" onclick="startGameMode('prologue')"><b>▶ 重播序章剧情</b><span>逃离大厂与初遇四女主</span></button>
-          <button class="op-btn" onclick="startGameMode('tutorial')"><b>📘 重启首日教学</b><span>6步手把手实机引导</span></button>
+          <button class="op-btn special" onclick="startGameMode('prologue')">
+            <div class="op-btn-row"><b>▶ 重播序章</b>${infoTip("序章剧情", "重温陆沉大厂裸辞、雨夜接店与初遇四位亚比妹妹的完整开篇。")}</div>
+          </button>
+          <button class="op-btn" onclick="startGameMode('tutorial')">
+            <div class="op-btn-row"><b>📘 首日教学</b>${infoTip("首日教学", "从第 1 天重新开启 6 步互动经营引导。")}</div>
+          </button>
         </div>
       </div>
       <div class="op-box">
-        <div class="op-title">🌸 跨年露台 · 四女主单人 True End 快速直达</div>
+        <div class="op-title">
+          <span class="op-title-left">🌸 跨年露台 True End ${infoTip("单人结局直达", "直接体验跨年千人 Live 结束后，3F 露台烟花下的四女主单人 True End 告白剧情。")}</span>
+        </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-          <button class="op-btn special" onclick="triggerTrueEnd('mahiru')"><b>真昼 True End</b><span>备用钥匙与99分</span></button>
-          <button class="op-btn special" onclick="triggerTrueEnd('reine')"><b>零音 True End</b><span>第0号真话</span></button>
-          <button class="op-btn special" onclick="triggerTrueEnd('kohaku')"><b>琥珀 True End</b><span>专属砂糖橘</span></button>
-          <button class="op-btn special" onclick="triggerTrueEnd('millie')"><b>千禧 True End</b><span>永久存档点</span></button>
+          <button class="op-btn special" onclick="triggerTrueEnd('mahiru')"><div class="op-btn-row"><b>真昼 End</b>${infoTip("林真昼 True End", "《备用钥匙与 99 分》：深夜烟花下交出 404 的猫咪黄铜钥匙。")}</div></button>
+          <button class="op-btn special" onclick="triggerTrueEnd('reine')"><div class="op-btn-row"><b>零音 End</b>${infoTip("白石零音 True End", "《第 0 号真话》：摘下舞台面具后，写给第 0 号观众的歌。")}</div></button>
+          <button class="op-btn special" onclick="triggerTrueEnd('kohaku')"><div class="op-btn-row"><b>琥珀 End</b>${infoTip("陈琥珀 True End", "《专属砂糖橘》：终于肯靠在别人肩上喊累的大姐头。")}</div></button>
+          <button class="op-btn special" onclick="triggerTrueEnd('millie')"><div class="op-btn-row"><b>千禧 End</b>${infoTip("苏千禧 True End", "《永久存档点》：走出吧台隐私帘，把现实设为永不回档的主线。")}</div></button>
         </div>
       </div>
       <div class="op-box">
-        <div class="op-title">📅 12 周五幕剧核心章节与特殊企划日直达</div>
+        <div class="op-title">
+          <span class="op-title-left">📅 五幕主线日程直达 ${infoTip("日程跳转", "点击任意关键日程直接跳转，悬停右侧感叹号可预览该日高潮剧情与限定企划。")}</span>
+        </div>
         <div class="op-list">${chList}</div>
       </div>`;
   }

@@ -72,8 +72,11 @@
       this.container.className = "sim3d-wrap";
       this.container.innerHTML = `
         <div class="sim3d-hud">
-          <span class="sim3d-pill"><i class="sim3d-live-dot"></i> <b id="sim3d-mode-label">3D 店铺实时经营箱庭</b></span>
-          <span class="sim3d-hint">🖱️ 按住拖拽旋转视角 · 滚轮推拉特写 · 点击小人互动</span>
+          <span class="sim3d-pill">
+            <i class="sim3d-live-dot"></i>
+            <b id="sim3d-mode-label">3D 实时实况</b>
+            <span class="info-tip" onclick="event.stopPropagation()" data-tip-title="3D 箱庭操作" data-tip="• 鼠标左键拖拽：旋转视角\n• 滚轮缩放：推拉特写\n• 点击店员小人：触发冒泡互动\n• 右侧切换休假：小人实时上下班">!</span>
+          </span>
         </div>
         <div id="sim3d-popups" class="sim3d-popups"></div>
       `;
@@ -522,13 +525,13 @@
 
       const labelEl = document.getElementById("sim3d-mode-label");
       const phaseTitles = {
-        roster: "3D 店铺早会备场 · 右侧切换【出勤/休假】小人实时上下班",
-        morning: "3D 晨间特训实况 · 妹妹们正在店内对练涨四维技能",
-        afternoon: "3D 午市营业实况 · 顾客进店吃蛋包饭 & 2F拍切闪光爆金币",
-        evening: "3D B1 地下 Live 演出实况 · 全员登台演出 & 台下荧光棒打Call！",
-        night: "3D 打烊收尾与夜间社媒引流"
+        roster: "3D 实况 · 早会排班",
+        morning: "3D 实况 · 晨间特训",
+        afternoon: "3D 实况 · 午市营业",
+        evening: "3D 实况 · B1 演出中",
+        night: "3D 实况 · 打烊收尾"
       };
-      if (labelEl) labelEl.textContent = phaseTitles[gameState.phase] || "3D 店铺实时经营箱庭";
+      if (labelEl) labelEl.textContent = phaseTitles[gameState.phase] || "3D 实时实况";
 
       ["mahiru", "reine", "kohaku", "millie"].forEach((cid) => {
         const ch = gameData.characters[cid];
