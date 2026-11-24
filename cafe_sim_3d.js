@@ -1,23 +1,52 @@
 /**
- * 《拯救亚比妹妹——仆咖经营日记》高精 HD-2D / 蔚蓝档案咖啡厅级 3D 箱庭引擎 v2
- * - 商业级二头身手绘 SD Q版立牌小人（Paper-Mario / Blue-Archive 弹性蹦跳阴影立牌）
+ * 《拯救亚比妹妹——仆咖经营日记》高精 HD-2D 3D 箱庭引擎 v3
+ * - 拟真骨骼蒙皮 2.5D 角色系统：独立左右腿交替迈步/抬脚屈膝、自然步态重心起伏、双臂反向摆动、头部独立稳像与张望、平滑3D转身
  * - 程序化精雕胡桃木吧台、霓虹拱窗夜景、天鹅绒卡座、2F拍切爱心霓虹布景、B1架子鼓音箱阵与频谱LED大屏
  */
 (function () {
   const STAFF_DEFS = [
-    { id: "luchen", tex: "chibi_luchen", name: "陆沉 · 店长", color: "#70b5ff", h: 1.95 },
-    { id: "mahiru", tex: "chibi_mahiru", name: "真昼 · 拍切销冠", color: "#ff5f91", h: 1.92 },
-    { id: "reine",  tex: "chibi_reine",  name: "零音 · 主唱", color: "#ab75ff", h: 1.95 },
-    { id: "kohaku", tex: "chibi_kohaku", name: "琥珀 · 主厨", color: "#e9c76d", h: 1.92 },
-    { id: "millie", tex: "chibi_millie", name: "千禧 · 黑客", color: "#7fe0a3", h: 1.82 }
+    { id: "luchen", tex: "chibi_luchen", name: "陆沉 · 店长", color: "#70b5ff", h: 1.95, quote: "☕ 手冲刚闷蒸好，慢用" },
+    { id: "mahiru", tex: "chibi_mahiru", name: "真昼 · 拍切销冠", color: "#ff5f91", h: 1.92, quote: "📸 要画歪嘴猫签名吗♪" },
+    { id: "reine",  tex: "chibi_reine",  name: "零音 · 主唱", color: "#ab75ff", h: 1.95, quote: "🎸 调音中，别离音箱太近" },
+    { id: "kohaku", tex: "chibi_kohaku", name: "琥珀 · 主厨", color: "#e9c76d", h: 1.92, quote: "🍳 蛋包饭刚出锅！闪开~" },
+    { id: "millie", tex: "chibi_millie", name: "千禧 · 黑客", color: "#7fe0a3", h: 1.82, quote: "🎮 别看我…社媒数据涨了！" }
   ];
 
   const GUEST_ARCHETYPES = [
-    { tex: "chibi_guest_jirai",   tag: "地雷系同好", color: "#ff8fb0" },
-    { tex: "chibi_guest_wota",    tag: "地偶死忠粉", color: "#c9a0f5" },
-    { tex: "chibi_guest_vlogger", tag: "探店Up主",   color: "#ffe7a8" },
-    { tex: "chibi_guest_office",  tag: "下班白领",   color: "#7fe0a3" }
+    { tex: "chibi_guest_jirai",   tag: "地雷系同好", color: "#ff8fb0", quote: "💖 真昼今天的双马尾超可爱！" },
+    { tex: "chibi_guest_wota",    tag: "地偶死忠粉", color: "#c9a0f5", quote: "🔥 等晚场零音开唱！" },
+    { tex: "chibi_guest_vlogger", tag: "探店Up主",   color: "#ffe7a8", quote: "🎥 这家后巷女仆店超有氛围！" },
+    { tex: "chibi_guest_office",  tag: "下班白领",   color: "#7fe0a3", quote: "🍓 下班喝杯草莓奶续命~" }
   ];
+
+  // Pixel-calibrated 3-layer anatomical rig profiles per chibi sprite (u: left->right 0..1, v: feet->head 0..1)
+  const RIG_PROFILES = {
+    chibi_luchen:        { splitU: 0.530, legMinU: 0.21, legMaxU: 0.78, hipV: 0.27, neckV: 0.64, strideAmp: 0.28, armAmp: 0.11, hairSway: 0.6 },
+    chibi_mahiru:        { splitU: 0.457, legMinU: 0.33, legMaxU: 0.61, hipV: 0.25, neckV: 0.60, strideAmp: 0.30, armAmp: 0.08, hairSway: 1.35 },
+    chibi_reine:         { splitU: 0.440, legMinU: 0.18, legMaxU: 0.76, hipV: 0.30, neckV: 0.64, strideAmp: 0.28, armAmp: 0.07, hairSway: 1.2 },
+    chibi_kohaku:        { splitU: 0.540, legMinU: 0.31, legMaxU: 0.79, hipV: 0.29, neckV: 0.60, strideAmp: 0.30, armAmp: 0.09, hairSway: 1.0 },
+    chibi_millie:        { splitU: 0.486, legMinU: 0.18, legMaxU: 0.77, hipV: 0.27, neckV: 0.63, strideAmp: 0.27, armAmp: 0.07, hairSway: 0.9 },
+    chibi_guest_jirai:   { splitU: 0.510, legMinU: 0.34, legMaxU: 0.73, hipV: 0.28, neckV: 0.61, strideAmp: 0.30, armAmp: 0.13, hairSway: 1.15 },
+    chibi_guest_wota:    { splitU: 0.475, legMinU: 0.25, legMaxU: 0.72, hipV: 0.28, neckV: 0.63, strideAmp: 0.30, armAmp: 0.16, hairSway: 1.0 },
+    chibi_guest_vlogger: { splitU: 0.509, legMinU: 0.17, legMaxU: 0.84, hipV: 0.32, neckV: 0.62, strideAmp: 0.28, armAmp: 0.11, hairSway: 0.9 },
+    chibi_guest_office:  { splitU: 0.480, legMinU: 0.16, legMaxU: 0.78, hipV: 0.30, neckV: 0.63, strideAmp: 0.29, armAmp: 0.12, hairSway: 0.85 }
+  };
+
+  // Walkable obstacle circles so staff & guests naturally curve around cafe tables
+  const WALK_OBSTACLES = [
+    { x: -4.4, z: 1.35, r: 1.12 },
+    { x: -1.3, z: 1.45, r: 1.12 },
+    { x: -2.8, z: 3.65, r: 1.12 },
+    { x:  2.45, z: 0.35, r: 0.85 }
+  ];
+
+  function clamp01(x) {
+    return x < 0 ? 0 : x > 1 ? 1 : x;
+  }
+  function smoothstep(edge0, edge1, x) {
+    const t = clamp01((x - edge0) / (edge1 - edge0));
+    return t * t * (3 - 2 * t);
+  }
 
   const SPOTS = {
     door:       { x: -6.8, y: 0, z: 4.5 },
@@ -43,6 +72,7 @@
       this.renderer = null;
       this.visible = false;
       this.texCache = new Map();
+      this.rigTexCache = new Map();
 
       this.yaw = 0.56;
       this.pitch = 0.54;
@@ -127,6 +157,75 @@
       }
       this.texCache.set(key, { tex, aspect: item ? item.w / item.h : 0.65 });
       return this.texCache.get(key);
+    }
+
+    _loadRigPartTextures(key, rig) {
+      if (this.rigTexCache.has(key)) return this.rigTexCache.get(key);
+      const T = window.THREE;
+      const assets = window.CHIBI_3D_ASSETS || {};
+      const item = assets[key];
+      const aspect = item ? item.w / item.h : 0.65;
+      const hipOverlap = 0.045;
+
+      const makeTex = () => {
+        const c = document.createElement("canvas");
+        c.width = 4; c.height = 4;
+        const tx = new T.CanvasTexture(c);
+        if ("encoding" in tx && T.sRGBEncoding) tx.encoding = T.sRGBEncoding;
+        return tx;
+      };
+
+      const bundle = {
+        upperTex: makeTex(),
+        legLTex: makeTex(),
+        legRTex: makeTex(),
+        aspect,
+        hipOverlap
+      };
+
+      if (item && item.uri) {
+        const img = new Image();
+        img.onload = () => {
+          const iw = img.naturalWidth || item.w;
+          const ih = img.naturalHeight || item.h;
+
+          // 1. Upper body + skirt/coat hem + outer twintails/straps (clears ONLY the central leg box)
+          const uCvs = document.createElement("canvas");
+          uCvs.width = iw; uCvs.height = ih;
+          const uCtx = uCvs.getContext("2d");
+          uCtx.drawImage(img, 0, 0, iw, ih);
+          const lxPx = Math.floor(rig.legMinU * iw);
+          const rxPx = Math.ceil(rig.legMaxU * iw);
+          const hipTopY = Math.round((1 - rig.hipV) * ih);
+          uCtx.clearRect(lxPx, hipTopY, Math.max(1, rxPx - lxPx), ih - hipTopY);
+          bundle.upperTex.image = uCvs;
+          bundle.upperTex.needsUpdate = true;
+
+          // 2. Left Leg sub-sprite (cleanly cropped at splitU with +4.5% upper thigh tuck behind skirt)
+          const splitPx = Math.round(rig.splitU * iw);
+          const legTopY = Math.max(0, Math.round((1 - (rig.hipV + hipOverlap)) * ih));
+          const legH = Math.max(2, ih - legTopY);
+
+          const lW = Math.max(2, splitPx - lxPx);
+          const lCvs = document.createElement("canvas");
+          lCvs.width = lW; lCvs.height = legH;
+          lCvs.getContext("2d").drawImage(img, lxPx, legTopY, lW, legH, 0, 0, lW, legH);
+          bundle.legLTex.image = lCvs;
+          bundle.legLTex.needsUpdate = true;
+
+          // 3. Right Leg sub-sprite (zero shared vertices with left leg!)
+          const rW = Math.max(2, rxPx - splitPx);
+          const rCvs = document.createElement("canvas");
+          rCvs.width = rW; rCvs.height = legH;
+          rCvs.getContext("2d").drawImage(img, splitPx, legTopY, rW, legH, 0, 0, rW, legH);
+          bundle.legRTex.image = rCvs;
+          bundle.legRTex.needsUpdate = true;
+        };
+        img.src = item.uri;
+      }
+
+      this.rigTexCache.set(key, bundle);
+      return bundle;
     }
 
     _buildProceduralTextures() {
@@ -416,51 +515,411 @@
       return sp;
     }
 
-    _createStandeeActor(texKey, label, badgeCol, charH) {
+    _createStandeeActor(texKey, label, badgeCol, charH, quoteText) {
       const T = window.THREE;
       const root = new T.Group();
-      const asset = this._loadAssetTex(texKey);
+      const rig = RIG_PROFILES[texKey] || {
+        splitU: 0.5, legMinU: 0.22, legMaxU: 0.78, hipV: 0.29, neckV: 0.62, strideAmp: 0.28, armAmp: 0.10, hairSway: 1.0
+      };
+      const parts = this._loadRigPartTextures(texKey, rig);
       const h = charH || 1.88;
-      const w = h * asset.aspect;
+      const w = h * parts.aspect;
+      const hipOverlap = parts.hipOverlap;
 
-      // Soft ground contact shadow + glowing character aura ring
+      // Soft ground contact shadow + subtle aura ring
       const shadow = new T.Mesh(
-        new T.CircleGeometry(0.46, 20),
-        new T.MeshBasicMaterial({ color: 0x07040e, transparent: true, opacity: 0.62 })
+        new T.CircleGeometry(0.45, 22),
+        new T.MeshBasicMaterial({ color: 0x07040e, transparent: true, opacity: 0.60 })
       );
       shadow.rotation.x = -Math.PI / 2;
       shadow.position.y = 0.02;
       root.add(shadow);
 
       const ring = new T.Mesh(
-        new T.RingGeometry(0.42, 0.49, 24),
-        new T.MeshBasicMaterial({ color: badgeCol, transparent: true, opacity: 0.48, side: T.DoubleSide })
+        new T.RingGeometry(0.41, 0.47, 24),
+        new T.MeshBasicMaterial({ color: badgeCol, transparent: true, opacity: 0.42, side: T.DoubleSide })
       );
       ring.rotation.x = -Math.PI / 2;
       ring.position.y = 0.025;
       root.add(ring);
 
-      // Pivot at feet (y=0) so squash-and-stretch & waddle tilt anchor cleanly on the floor!
       const pivot = new T.Group();
       root.add(pivot);
 
-      const planeGeo = new T.PlaneGeometry(w, h);
-      planeGeo.translate(0, h / 2, 0);
+      const hipY = rig.hipV * h;
+      const neckY = rig.neckV * h;
+      const hipCenterX = (rig.splitU - 0.5) * w;
+      const hipLX = ((rig.legMinU + rig.splitU) * 0.5 - 0.5) * w;
+      const hipRX = ((rig.splitU + rig.legMaxU) * 0.5 - 0.5) * w;
+      const shY = (rig.neckV - 0.05) * h;
+      const shLX = (rig.splitU - 0.14) * w - 0.5 * w;
+      const shRX = (rig.splitU + 0.14) * w - 0.5 * w;
+
+      // Helper to build an independent deformable leg mesh (ZERO shared vertices between left & right shoes!)
+      const buildLegMesh = (u0, u1, tex) => {
+        const legW = Math.max(0.05, (u1 - u0) * w);
+        const legH = Math.min(1, rig.hipV + hipOverlap) * h;
+        const geo = new T.PlaneGeometry(legW, legH, 6, 10);
+        const cx = ((u0 + u1) * 0.5 - 0.5) * w;
+        geo.translate(cx, legH * 0.5, 0);
+        const pos = geo.attributes.position;
+        const count = pos.count;
+        const bx = new Float32Array(count);
+        const by = new Float32Array(count);
+        const reach = new Float32Array(count);
+        const knee = new Float32Array(count);
+        for (let i = 0; i < count; i++) {
+          const x = pos.getX(i);
+          const y = pos.getY(i);
+          bx[i] = x;
+          by[i] = y;
+          const r = clamp01((hipY - y) / Math.max(0.05, hipY));
+          reach[i] = r;
+          knee[i] = Math.sin(r * Math.PI);
+        }
+        const mesh = new T.Mesh(
+          geo,
+          new T.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.08, side: T.DoubleSide })
+        );
+        pivot.add(mesh);
+        return { mesh, geo, bx, by, reach, knee };
+      };
+
+      const legL = buildLegMesh(rig.legMinU, rig.splitU, parts.legLTex);
+      const legR = buildLegMesh(rig.splitU, rig.legMaxU, parts.legRTex);
+
+      // Upper Body + Skirt/Coat Hem + Arms + Head + Hair/Coat-Tails mesh (sits cleanly in front of thighs)
+      const upperGeo = new T.PlaneGeometry(w, h, 16, 22);
+      upperGeo.translate(0, h * 0.5, 0);
+      const posAttr = upperGeo.attributes.position;
+      const uvAttr = upperGeo.attributes.uv;
+      const count = posAttr.count;
+
+      const baseX = new Float32Array(count);
+      const baseY = new Float32Array(count);
+      const wChest = new Float32Array(count);
+      const wArmL = new Float32Array(count);
+      const wArmR = new Float32Array(count);
+      const armReach = new Float32Array(count);
+      const wHead = new Float32Array(count);
+      const wHairL = new Float32Array(count);
+      const wHairR = new Float32Array(count);
+
+      for (let i = 0; i < count; i++) {
+        baseX[i] = posAttr.getX(i);
+        baseY[i] = posAttr.getY(i);
+        const u = uvAttr.getX(i);
+        const v = uvAttr.getY(i);
+
+        wChest[i] =
+          smoothstep(rig.hipV + 0.04, rig.hipV + 0.14, v) *
+          (1 - smoothstep(rig.neckV - 0.04, rig.neckV + 0.05, v));
+
+        const armV =
+          smoothstep(rig.hipV + 0.02, rig.hipV + 0.11, v) *
+          (1 - smoothstep(rig.neckV - 0.03, rig.neckV + 0.04, v));
+        const leftArmU = 1 - smoothstep(rig.splitU - 0.25, rig.splitU - 0.13, u);
+        const rightArmU = smoothstep(rig.splitU + 0.13, rig.splitU + 0.25, u);
+        wArmL[i] = armV * leftArmU;
+        wArmR[i] = armV * rightArmU;
+        armReach[i] = clamp01((rig.neckV - v) / Math.max(0.08, rig.neckV - rig.hipV));
+
+        wHead[i] = smoothstep(rig.neckV - 0.035, rig.neckV + 0.05, v);
+
+        const outerL = 1 - smoothstep(rig.legMinU - 0.02, rig.legMinU + 0.05, u);
+        const outerR = smoothstep(rig.legMaxU - 0.05, rig.legMaxU + 0.02, u);
+        const tailV = 1 - smoothstep(rig.neckV + 0.12, 0.96, v);
+        wHairL[i] = outerL * tailV;
+        wHairR[i] = outerR * tailV;
+      }
+
       const standee = new T.Mesh(
-        planeGeo,
-        new T.MeshBasicMaterial({ map: asset.tex, transparent: true, alphaTest: 0.08, side: T.DoubleSide })
+        upperGeo,
+        new T.MeshBasicMaterial({ map: parts.upperTex, transparent: true, alphaTest: 0.08, side: T.DoubleSide })
       );
       pivot.add(standee);
 
+      let badge = null;
       if (label) {
-        const badge = this._makeNameBadge(label, badgeCol);
-        badge.position.set(0, h + 0.26, 0);
+        badge = this._makeNameBadge(label, badgeCol);
+        badge.position.set(0, h + 0.24, 0);
         root.add(badge);
       }
 
-      root.userData = { pivot, standee, baseH: h, flip: 1 };
+      root.userData = {
+        pivot,
+        standee,
+        legL,
+        legR,
+        shadow,
+        badge,
+        quote: quoteText || "💖 欢迎光临 404~",
+        badgeCol,
+        baseH: h,
+        baseW: w,
+        rig,
+        hipY,
+        neckY,
+        hipCenterX,
+        hipLX,
+        hipRX,
+        shY,
+        shLX,
+        shRX,
+        upperGeo,
+        baseX,
+        baseY,
+        wChest,
+        wArmL,
+        wArmR,
+        armReach,
+        wHead,
+        wHairL,
+        wHairR,
+        // Live kinematic state
+        gaitPhase: Math.random() * Math.PI * 2,
+        moveBlend: 0,
+        turnAngle: 0,
+        turnTarget: 0,
+        reactTimer: 0,
+        lookAngle: 0,
+        lookTarget: 0,
+        lookTimer: 1.5 + Math.random() * 3.0
+      };
+      standee.userData.actorRoot = root;
+      legL.mesh.userData.actorRoot = root;
+      legR.mesh.userData.actorRoot = root;
       this.scene.add(root);
       return root;
+    }
+
+    _deformLegPart(part, hipX, hipY, hipSwayX, bodyBob, grooveKnee, reactHop, legAng, lift, kneePull, zDepth) {
+      const pos = part.geo.attributes.position;
+      const arr = pos.array;
+      const n = part.bx.length;
+      const cosA = Math.cos(legAng);
+      const sinA = Math.sin(legAng);
+      const topFollow = bodyBob * 0.65 - grooveKnee;
+
+      for (let i = 0; i < n; i++) {
+        const bx = part.bx[i];
+        const by = part.by[i];
+        const r = part.reach[i];
+        const rx = bx - hipX;
+        const ry = by - hipY;
+        // Rotate cleanly around hip joint + natural knee forward curve & foot lift!
+        let x = hipX + rx * cosA - ry * sinA + hipSwayX * (1 - r * 0.7) - part.knee[i] * kneePull;
+        let y = hipY + rx * sinA + ry * cosA + topFollow * (1 - r) + lift * r + reactHop;
+        if (y < 0 && reactHop <= 0.001) y = 0;
+
+        const idx3 = i * 3;
+        arr[idx3] = x;
+        arr[idx3 + 1] = y;
+        arr[idx3 + 2] = zDepth;
+      }
+      pos.needsUpdate = true;
+    }
+
+    _deformActorRig(u, t, seed, mode) {
+      const h = u.baseH;
+      const w = u.baseW;
+      const rig = u.rig;
+      const mv = u.moveBlend; // 0 = idle, 1 = full natural walk
+      const gp = u.gaitPhase;
+
+      // Ensure upper body ALWAYS stays in front of thighs even after 180-deg Y-turn!
+      const zSign = Math.cos(u.turnAngle) >= 0 ? 1 : -1;
+
+      // Reaction hop when clicked (decays smoothly over 0.55s)
+      let reactHop = 0;
+      let reactWave = 0;
+      if (u.reactTimer > 0) {
+        const p = 1 - u.reactTimer / 0.55;
+        reactHop = Math.sin(p * Math.PI) * 0.24 * h;
+        reactWave = Math.sin(p * Math.PI * 3) * 0.28 * (1 - p * 0.5);
+      }
+
+      // 1. Bipedal Leg Kinematics (Left & Right 180 deg out of phase — zero shared vertices!)
+      const swingL = Math.sin(gp);
+      const strideL = -Math.cos(gp);
+      const swingR = Math.sin(gp + Math.PI);
+      const strideR = -Math.cos(gp + Math.PI);
+
+      const liftL = swingL > 0 ? Math.pow(swingL, 0.85) * 0.145 * h * mv : 0;
+      const liftR = swingR > 0 ? Math.pow(swingR, 0.85) * 0.145 * h * mv : 0;
+      // Negative angle swings foot toward -X (forward in local sprite space!)
+      const legAngL = -strideL * rig.strideAmp * mv;
+      const legAngR = -strideR * rig.strideAmp * mv;
+      const kneeL = (swingL > 0 ? swingL : 0) * 0.055 * w * mv;
+      const kneeR = (swingR > 0 ? swingR : 0) * 0.055 * w * mv;
+      // Front-swinging leg passes cleanly in front of planted leg, both tucked neatly behind skirt hem!
+      const legDepthL = (swingL * 0.014 - 0.004) * zSign;
+      const legDepthR = (swingR * 0.014 - 0.004) * zSign;
+
+      // 2. Human Pelvis & Torso Dynamics
+      let bodyBob = Math.abs(Math.sin(gp)) * 0.044 * h * mv + reactHop;
+      let hipSwayX = Math.cos(gp) * 0.018 * w * mv;
+      let torsoLean = 0.062 * mv;
+
+      const breath = Math.sin(t * 2.15 + seed);
+      const idleScale = 1 - mv;
+      const chestExpand = breath * 0.014 * idleScale;
+      const breathRise = breath * 0.008 * h * idleScale;
+      const idleWeightShift = Math.sin(t * 0.72 + seed) * 0.014 * w * idleScale;
+      hipSwayX += idleWeightShift;
+      torsoLean += Math.sin(t * 0.72 + seed) * 0.015 * idleScale;
+
+      // 3. Arm Counter-Swing
+      let armAngL = strideL * rig.armAmp * mv + reactWave;
+      let armAngR = strideR * rig.armAmp * mv - reactWave;
+      let armLiftCheer = 0;
+
+      // 4. Independent Head Stabilization & Natural Micro-Motions
+      let headRot =
+        (-torsoLean * 0.55 + Math.sin(gp * 2 - 0.65) * 0.032) * mv +
+        u.lookAngle * idleScale +
+        Math.sin(t * 1.45 + seed) * 0.022 * idleScale;
+      let headLagY = Math.sin(gp * 2 - 0.75) * 0.012 * h * mv + breathRise * 0.6;
+
+      // 5. Role-specific natural human gestures when idle at station / stage / crowd
+      let grooveKnee = 0;
+      if (idleScale > 0.15) {
+        if (mode === "perform") {
+          const beat = t * 7.6 + seed;
+          const groove = Math.sin(beat);
+          const doubleBeat = Math.abs(Math.sin(beat));
+          grooveKnee = (1 - doubleBeat) * 0.042 * h * idleScale;
+          bodyBob += (doubleBeat * 0.055 - 0.025) * h * idleScale;
+          torsoLean += groove * 0.065 * idleScale;
+          headRot += Math.sin(beat - 0.35) * 0.095 * idleScale;
+          armAngL += Math.sin(beat) * 0.14 * idleScale;
+          armAngR += Math.cos(beat) * 0.14 * idleScale;
+        } else if (mode === "cheer") {
+          const beat = t * 8.2 + seed;
+          const pump = Math.sin(beat);
+          grooveKnee = Math.max(0, -pump) * 0.035 * h * idleScale;
+          bodyBob += Math.max(0, pump) * 0.05 * h * idleScale;
+          armLiftCheer = (pump * 0.5 + 0.5) * 0.095 * h * idleScale;
+          armAngL += pump * 0.18 * idleScale;
+          armAngR -= pump * 0.18 * idleScale;
+          headRot += Math.sin(beat - 0.2) * 0.06 * idleScale;
+        } else if (mode === "training") {
+          const tr = Math.sin(t * 3.8 + seed);
+          bodyBob += Math.abs(tr) * 0.022 * h * idleScale;
+          headRot += tr * 0.05 * idleScale;
+          armAngL += tr * 0.08 * idleScale;
+          armAngR -= tr * 0.08 * idleScale;
+        } else {
+          const wk = Math.sin(t * 2.6 + seed);
+          armAngL += wk * 0.035 * idleScale;
+          armAngR -= wk * 0.03 * idleScale;
+        }
+      }
+
+      // Deform the 2 completely independent leg meshes first!
+      this._deformLegPart(u.legL, u.hipLX, u.hipY, hipSwayX, bodyBob, grooveKnee, reactHop, legAngL, liftL, kneeL, legDepthL);
+      this._deformLegPart(u.legR, u.hipRX, u.hipY, hipSwayX, bodyBob, grooveKnee, reactHop, legAngR, liftR, kneeR, legDepthR);
+
+      // Now deform the Upper Body + Arms + Head + Hair mesh (positioned slightly forward in Z)
+      const pos = u.upperGeo.attributes.position;
+      const arr = pos.array;
+      const n = u.baseX.length;
+
+      const hairFactor = rig.hairSway || 1.0;
+      const hairLag = (Math.sin(gp * 2 - 1.15) * 0.038 * mv + Math.sin(t * 1.9 + seed) * 0.015 * idleScale) * w * hairFactor;
+
+      const cosLean = Math.cos(torsoLean);
+      const sinLean = Math.sin(torsoLean);
+      const cosHead = Math.cos(headRot);
+      const sinHead = Math.sin(headRot);
+      const cosAL = Math.cos(armAngL);
+      const sinAL = Math.sin(armAngL);
+      const cosAR = Math.cos(armAngR);
+      const sinAR = Math.sin(armAngR);
+
+      const hipY = u.hipY;
+      const neckY = u.neckY;
+      const hipCX = u.hipCenterX;
+      const shY = u.shY;
+      const shLX = u.shLX;
+      const shRX = u.shRX;
+      const neckPivotX = hipCX + hipSwayX - (neckY - hipY) * sinLean;
+      const neckPivotY = neckY + bodyBob + breathRise - grooveKnee;
+      const upperZ = 0.026 * zSign;
+
+      for (let i = 0; i < n; i++) {
+        let x = u.baseX[i];
+        let y = u.baseY[i];
+
+        // Upper body lean + pelvis bob + breathing
+        const rxU = x - hipCX;
+        const ryU = y - hipY;
+        x = hipCX + rxU * cosLean - ryU * sinLean + hipSwayX;
+        y = hipY + rxU * sinLean + ryU * cosLean + bodyBob + breathRise - grooveKnee;
+
+        const wc = u.wChest[i];
+        if (wc > 0.001) {
+          x += (x - hipCX) * chestExpand * wc;
+        }
+
+        // Natural Arm Swing & Cheer Pumping
+        const waL = u.wArmL[i];
+        if (waL > 0.001) {
+          const rx = x - shLX;
+          const ry = y - (shY + bodyBob - grooveKnee);
+          const aX = shLX + rx * cosAL - ry * sinAL;
+          const aY = (shY + bodyBob - grooveKnee) + rx * sinAL + ry * cosAL;
+          x += (aX - x) * waL;
+          y += (aY - y + armLiftCheer * u.armReach[i]) * waL;
+        }
+        const waR = u.wArmR[i];
+        if (waR > 0.001) {
+          const rx = x - shRX;
+          const ry = y - (shY + bodyBob - grooveKnee);
+          const aX = shRX + rx * cosAR - ry * sinAR;
+          const aY = (shY + bodyBob - grooveKnee) + rx * sinAR + ry * cosAR;
+          x += (aX - x) * waR;
+          y += (aY - y + armLiftCheer * u.armReach[i]) * waR;
+        }
+
+        // Independent Head Rotation locked cleanly onto Neck Pivot
+        const wh = u.wHead[i];
+        if (wh > 0.001) {
+          const rx = x - neckPivotX;
+          const ry = y - neckPivotY;
+          const hX = neckPivotX + rx * cosHead - ry * sinHead;
+          const hY = neckPivotY + rx * sinHead + ry * cosHead;
+          x += (hX - x) * wh;
+          y += (hY - y + headLagY) * wh;
+        }
+
+        // Soft Secondary Hair / Coat-Tail Follow-Through
+        const whL = u.wHairL[i];
+        const whR = u.wHairR[i];
+        if (whL > 0.001) {
+          x += (hairLag + 0.03 * w * mv) * whL;
+          y += Math.abs(hairLag) * 0.22 * whL;
+        }
+        if (whR > 0.001) {
+          x += (hairLag + 0.03 * w * mv) * whR;
+          y += Math.abs(hairLag) * 0.22 * whR;
+        }
+
+        const idx3 = i * 3;
+        arr[idx3] = x;
+        arr[idx3 + 1] = y;
+        arr[idx3 + 2] = upperZ;
+      }
+
+      pos.needsUpdate = true;
+
+      if (u.shadow) {
+        const sScale = 1 - Math.min(0.28, (bodyBob / h) * 1.4);
+        u.shadow.scale.set(sScale * (1 + mv * 0.08), sScale, 1);
+      }
+      if (u.badge) {
+        u.badge.position.y = h + 0.24 + bodyBob * 0.85;
+      }
     }
 
     _buildStaffActors() {
@@ -472,15 +931,15 @@
         millie: SPOTS.nook
       };
       STAFF_DEFS.forEach((d, idx) => {
-        const mesh = this._createStandeeActor(d.tex, d.name, d.color, d.h);
+        const mesh = this._createStandeeActor(d.tex, d.name, d.color, d.h, d.quote);
         const p = initPos[d.id];
         mesh.position.set(p.x, p.y, p.z);
         this.staff.set(d.id, {
           id: d.id,
           mesh,
           target: { ...p },
-          speed: 2.75,
-          waitTimer: 1.2 + idx * 0.6,
+          speed: d.id === "kohaku" ? 2.55 : 2.15,
+          waitTimer: 1.5 + idx * 0.9,
           role: d.id === "kohaku" ? "serving" : "station",
           seed: idx * 1.7
         });
@@ -490,7 +949,7 @@
     _spawnGuest(randomStart) {
       if (this.guests.length >= 8) return;
       const arch = GUEST_ARCHETYPES[Math.floor(Math.random() * GUEST_ARCHETYPES.length)];
-      const mesh = this._createStandeeActor(arch.tex, arch.tag, arch.color, 1.78);
+      const mesh = this._createStandeeActor(arch.tex, arch.tag, arch.color, 1.78, arch.quote);
       const start = randomStart ? SPOTS.tables[Math.floor(Math.random() * SPOTS.tables.length)] : SPOTS.door;
       mesh.position.set(start.x, start.y, start.z);
 
@@ -500,8 +959,8 @@
         state: randomStart ? "enjoying" : "entering",
         target: dest.pos,
         activity: dest.kind,
-        timer: 3.0 + Math.random() * 3.5,
-        speed: 2.15 + Math.random() * 0.45,
+        timer: 3.4 + Math.random() * 3.8,
+        speed: 1.85 + Math.random() * 0.42,
         seed: Math.random() * 6.28
       });
     }
@@ -589,46 +1048,81 @@
       setTimeout(() => el.remove(), 1600);
     }
 
-    _updateStandeeMotion(mesh, target, speed, dt, seed, danceMode) {
+    _updateStandeeMotion(mesh, target, speed, dt, seed, animMode) {
       const dx = target.x - mesh.position.x;
       const dz = target.z - mesh.position.z;
       const dy = (target.y || 0) - mesh.position.y;
       const dist = Math.hypot(dx, dz);
       const u = mesh.userData;
 
-      mesh.position.y += dy * Math.min(1, dt * 8);
-      // Billboard cleanly toward camera yaw so 2D hand-drawn SD art never looks paper-flat from the side!
-      u.pivot.rotation.y = this.yaw;
+      // Smooth floor elevation transitions (e.g. stepping onto 2F Cheki platform or B1 stage)
+      mesh.position.y += dy * Math.min(1, dt * 7.5);
 
-      if (dist > 0.08) {
-        const step = Math.min(dist, speed * dt);
-        mesh.position.x += (dx / dist) * step;
-        mesh.position.z += (dz / dist) * step;
-        if (Math.abs(dx) > 0.02) u.flip = dx >= 0 ? 1 : -1;
-
-        // Paper-Mario / Blue-Archive lively hop-and-waddle animation!
-        const w = this.clock * 14 + seed;
-        const hop = Math.abs(Math.sin(w));
-        u.pivot.position.y = hop * 0.16;
-        u.standee.rotation.z = Math.sin(w) * 0.09;
-        u.standee.scale.set(u.flip * (1 + (1 - hop) * 0.05), 1 - (1 - hop) * 0.04, 1);
-        return false;
-      } else {
-        if (danceMode === "perform" || danceMode === "cheer") {
-          const b = this.clock * 10.5 + seed;
-          const jump = Math.abs(Math.sin(b));
-          u.pivot.position.y = jump * (danceMode === "perform" ? 0.24 : 0.15);
-          u.standee.rotation.z = Math.sin(b * 0.5) * 0.11;
-          u.standee.scale.set(u.flip * (1.04 - jump * 0.06), 0.96 + jump * 0.08, 1);
-        } else {
-          // Gentle idle squash-breath
-          const br = Math.sin(this.clock * 3.1 + seed);
-          u.pivot.position.y = 0;
-          u.standee.rotation.z = br * 0.02;
-          u.standee.scale.set(u.flip * (1 - br * 0.018), 1 + br * 0.022, 1);
-        }
-        return true;
+      if (u.reactTimer > 0) {
+        u.reactTimer = Math.max(0, u.reactTimer - dt);
       }
+
+      // Natural idle look-around head tilt timer
+      u.lookTimer -= dt;
+      if (u.lookTimer <= 0) {
+        u.lookTimer = 2.0 + Math.random() * 3.2;
+        u.lookTarget = (Math.random() - 0.5) * 0.13;
+      }
+      u.lookAngle += (u.lookTarget - u.lookAngle) * Math.min(1, dt * 3.5);
+
+      const isWalking = dist > 0.06;
+      if (isWalking) {
+        // Gentle acceleration / deceleration near destination for natural human stopping!
+        const easeFactor = dist < 0.45 ? 0.45 + 0.55 * (dist / 0.45) : 1.0;
+        const step = Math.min(dist, speed * easeFactor * dt);
+        let dirX = dx / dist;
+        let dirZ = dz / dist;
+
+        // Soft steering around cafe tables & drum kit so characters naturally walk AROUND furniture
+        for (let oi = 0; oi < WALK_OBSTACLES.length; oi++) {
+          const ob = WALK_OBSTACLES[oi];
+          const toGoalOb = Math.hypot(target.x - ob.x, target.z - ob.z);
+          if (toGoalOb < ob.r * 0.85) continue; // destination itself is beside this table
+          const ox = mesh.position.x - ob.x;
+          const oz = mesh.position.z - ob.z;
+          const od = Math.hypot(ox, oz);
+          if (od > 0.001 && od < ob.r + 0.35) {
+            const push = (1 - od / (ob.r + 0.35)) * 1.45;
+            dirX += (ox / od) * push;
+            dirZ += (oz / od) * push;
+          }
+        }
+        const dLen = Math.hypot(dirX, dirZ) || 1;
+        dirX /= dLen;
+        dirZ /= dLen;
+
+        mesh.position.x += dirX * step;
+        mesh.position.z += dirZ * step;
+
+        // Project movement onto current camera screen-right vector so turning matches camera view!
+        const screenMoveX = dirX * Math.cos(this.yaw) - dirZ * Math.sin(this.yaw);
+        if (Math.abs(screenMoveX) > 0.08) {
+          // Sprites naturally face slightly left (-X); rotate Y by PI to face right (+X)
+          u.turnTarget = screenMoveX > 0 ? Math.PI : 0;
+        }
+
+        // Advance stride phase strictly proportional to real ground distance covered (zero foot sliding!)
+        u.gaitPhase += step * 6.2;
+        u.moveBlend += (1 - u.moveBlend) * Math.min(1, dt * 9.5);
+      } else {
+        // Smoothly settle back to neutral standing stance
+        u.moveBlend += (0 - u.moveBlend) * Math.min(1, dt * 8.0);
+        if (u.moveBlend < 0.005) u.moveBlend = 0;
+      }
+
+      // Smooth 3D paper-doll Y-turn instead of jarring instant mirror-snap!
+      u.turnAngle += (u.turnTarget - u.turnAngle) * Math.min(1, dt * 11.5);
+      u.pivot.rotation.y = this.yaw + u.turnAngle;
+
+      // Deform the skeletal mesh with real alternating leg strides, pelvis bob, arm swing & head stabilization
+      this._deformActorRig(u, this.clock, seed, animMode);
+
+      return !isWalking;
     }
 
     _animate(ts) {
@@ -653,19 +1147,46 @@
           this.chekiLight.intensity = 1.6 + this.flashTimer * 16.0;
         }
 
-        // Staff update
+        // Staff update with natural station patrol routines
         this.staff.forEach((st) => {
           if (!st.mesh.visible) return;
+          const animMode =
+            st.role === "performing" ? "perform" :
+            st.role === "training" ? "training" : "station";
           const arrived = this._updateStandeeMotion(
-            st.mesh, st.target, st.speed, dt, st.seed, st.role === "performing" ? "perform" : null
+            st.mesh, st.target, st.speed, dt, st.seed, animMode
           );
-          if (arrived && st.role === "serving") {
+          if (arrived) {
             st.waitTimer -= dt;
             if (st.waitTimer <= 0) {
-              st.waitTimer = 2.8 + Math.random() * 1.8;
-              const route = [SPOTS.barFront, ...SPOTS.tables];
-              const pick = route[Math.floor(Math.random() * route.length)];
-              st.target = { x: pick.x + 0.65, y: 0, z: pick.z + 0.15 };
+              if (st.role === "serving") {
+                st.waitTimer = 2.6 + Math.random() * 2.2;
+                const route = [SPOTS.barFront, ...SPOTS.tables];
+                const pick = route[Math.floor(Math.random() * route.length)];
+                st.target = { x: pick.x + 0.65, y: 0, z: pick.z + 0.15 };
+              } else if (st.role === "station") {
+                st.waitTimer = 3.8 + Math.random() * 3.5;
+                if (st.id === "luchen") {
+                  // Walk naturally along behind the walnut bar counter
+                  st.target = { x: -4.4 + Math.random() * 2.3, y: 0, z: -3.15 };
+                } else if (st.id === "mahiru") {
+                  // Move smoothly around the 2F Cheki corner & greet guests
+                  const pts = [
+                    SPOTS.chekiMaid,
+                    { x: 1.55, y: 0.36, z: -2.55 },
+                    { x: 3.15, y: 0.36, z: -2.75 }
+                  ];
+                  st.target = { ...pts[Math.floor(Math.random() * pts.length)] };
+                } else if (st.id === "reine") {
+                  // Pace subtly between bar & open walkway near stage during prep/afternoon
+                  const pts = [
+                    SPOTS.barFront,
+                    { x: 0.35, y: 0, z: 0.65 },
+                    { x: 1.35, y: 0, z: 2.35 }
+                  ];
+                  st.target = { ...pts[Math.floor(Math.random() * pts.length)] };
+                }
+              }
             }
           }
         });
@@ -673,14 +1194,14 @@
         // Customer flow update
         this.spawnTimer -= dt;
         if (this.spawnTimer <= 0) {
-          this.spawnTimer = this.currentFocus === "evening" ? 1.7 : 2.6;
+          this.spawnTimer = this.currentFocus === "evening" ? 1.8 : 2.8;
           this._spawnGuest(false);
         }
 
         for (let i = this.guests.length - 1; i >= 0; i--) {
           const g = this.guests[i];
-          const dance = g.state === "enjoying" && g.activity === "concert" ? "cheer" : null;
-          const arrived = this._updateStandeeMotion(g.mesh, g.target, g.speed, dt, g.seed, dance);
+          const animMode = g.state === "enjoying" && g.activity === "concert" ? "cheer" : "station";
+          const arrived = this._updateStandeeMotion(g.mesh, g.target, g.speed, dt, g.seed, animMode);
           if (arrived) {
             if (g.state === "entering") {
               g.state = "enjoying";
@@ -715,10 +1236,16 @@
 
     _bindControls() {
       const dom = this.renderer.domElement;
+      const T = window.THREE;
+      const raycaster = new T.Raycaster();
+      const pointer = new T.Vector2();
+      let downPos = { x: 0, y: 0 };
+
       dom.addEventListener("mousedown", (e) => {
         e.stopPropagation();
         this.dragging = true;
         this.lastMouse = { x: e.clientX, y: e.clientY };
+        downPos = { x: e.clientX, y: e.clientY };
       });
       window.addEventListener("mousemove", (e) => {
         if (!this.dragging) return;
@@ -731,7 +1258,47 @@
       window.addEventListener("mouseup", () => { this.dragging = false; });
       dom.addEventListener("click", (e) => {
         e.stopPropagation();
-        this.spawnFloatingPopup((Math.random() - 0.5) * 4, 2.3, (Math.random() - 0.5) * 3, "💖 店长巡店互动~", "#ff8fb0");
+        // Ignore click if user was dragging camera
+        if (Math.hypot(e.clientX - downPos.x, e.clientY - downPos.y) > 6) return;
+
+        const rect = dom.getBoundingClientRect();
+        pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(pointer, this.camera);
+
+        const meshes = [];
+        this.staff.forEach((st) => {
+          const u = st.mesh.userData;
+          if (st.mesh.visible && u) {
+            if (u.standee) meshes.push(u.standee);
+            if (u.legL && u.legL.mesh) meshes.push(u.legL.mesh);
+            if (u.legR && u.legR.mesh) meshes.push(u.legR.mesh);
+          }
+        });
+        this.guests.forEach((g) => {
+          const u = g.mesh.userData;
+          if (u) {
+            if (u.standee) meshes.push(u.standee);
+            if (u.legL && u.legL.mesh) meshes.push(u.legL.mesh);
+            if (u.legR && u.legR.mesh) meshes.push(u.legR.mesh);
+          }
+        });
+
+        const hits = raycaster.intersectObjects(meshes, false);
+        if (hits.length > 0) {
+          const actor = hits[0].object.userData.actorRoot;
+          if (actor && actor.userData) {
+            actor.userData.reactTimer = 0.55;
+            this.spawnFloatingPopup(
+              actor.position.x,
+              actor.position.y + actor.userData.baseH + 0.35,
+              actor.position.z,
+              actor.userData.quote,
+              actor.userData.badgeCol
+            );
+            return;
+          }
+        }
       });
       dom.addEventListener("wheel", (e) => {
         e.preventDefault();
