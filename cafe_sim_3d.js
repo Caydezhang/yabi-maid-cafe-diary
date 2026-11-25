@@ -732,87 +732,73 @@
 
       // Reaction hop when clicked (decays smoothly over 0.55s)
       let reactHop = 0;
-      let reactWave = 0;
       if (u.reactTimer > 0) {
         const p = 1 - u.reactTimer / 0.55;
-        reactHop = Math.sin(p * Math.PI) * 0.24 * h;
-        reactWave = Math.sin(p * Math.PI * 3) * 0.28 * (1 - p * 0.5);
+        reactHop = Math.sin(p * Math.PI) * 0.20 * h;
       }
 
-      // 1. Bipedal Leg Kinematics (Left & Right 180 deg out of phase — zero shared vertices!)
+      // 1. Bipedal Leg Kinematics (Left & Right 180 deg out of phase — clean human stride!)
       const swingL = Math.sin(gp);
       const strideL = -Math.cos(gp);
       const swingR = Math.sin(gp + Math.PI);
       const strideR = -Math.cos(gp + Math.PI);
 
-      const liftL = swingL > 0 ? Math.pow(swingL, 0.85) * 0.145 * h * mv : 0;
-      const liftR = swingR > 0 ? Math.pow(swingR, 0.85) * 0.145 * h * mv : 0;
+      const liftL = swingL > 0 ? Math.pow(swingL, 0.88) * 0.135 * h * mv : 0;
+      const liftR = swingR > 0 ? Math.pow(swingR, 0.88) * 0.135 * h * mv : 0;
       // Negative angle swings foot toward -X (forward in local sprite space!)
       const legAngL = -strideL * rig.strideAmp * mv;
       const legAngR = -strideR * rig.strideAmp * mv;
-      const kneeL = (swingL > 0 ? swingL : 0) * 0.055 * w * mv;
-      const kneeR = (swingR > 0 ? swingR : 0) * 0.055 * w * mv;
+      const kneeL = (swingL > 0 ? swingL : 0) * 0.052 * w * mv;
+      const kneeR = (swingR > 0 ? swingR : 0) * 0.052 * w * mv;
       // Front-swinging leg passes cleanly in front of planted leg, both tucked neatly behind skirt hem!
       const legDepthL = (swingL * 0.014 - 0.004) * zSign;
       const legDepthR = (swingR * 0.014 - 0.004) * zSign;
 
-      // 2. Human Pelvis & Torso Dynamics
-      let bodyBob = Math.abs(Math.sin(gp)) * 0.044 * h * mv + reactHop;
-      let hipSwayX = Math.cos(gp) * 0.018 * w * mv;
-      let torsoLean = 0.062 * mv;
+      // 2. Calm, Solid Human Upper Body Dynamics (ZERO jitter, ZERO rubbery warping!)
+      // Smooth cosine vertical rise per step (no sharp |sin| bounce!)
+      const smoothStepBob = (1 - Math.cos(gp * 2)) * 0.5;
+      let bodyBob = smoothStepBob * 0.019 * h * mv + reactHop;
+      let hipSwayX = Math.cos(gp) * 0.008 * w * mv;
+      // Subtle steady forward lean when walking (calm & grounded)
+      let torsoLean = 0.036 * mv;
 
-      const breath = Math.sin(t * 2.15 + seed);
+      // Gentle idle breathing (slow, calm ~0.28 Hz human breath)
+      const breath = Math.sin(t * 1.75 + seed);
       const idleScale = 1 - mv;
-      const chestExpand = breath * 0.014 * idleScale;
-      const breathRise = breath * 0.008 * h * idleScale;
-      const idleWeightShift = Math.sin(t * 0.72 + seed) * 0.014 * w * idleScale;
+      const breathRise = breath * 0.006 * h * idleScale;
+      const idleWeightShift = Math.sin(t * 0.55 + seed) * 0.007 * w * idleScale;
       hipSwayX += idleWeightShift;
-      torsoLean += Math.sin(t * 0.72 + seed) * 0.015 * idleScale;
 
-      // 3. Arm Counter-Swing
-      let armAngL = strideL * rig.armAmp * mv + reactWave;
-      let armAngR = strideR * rig.armAmp * mv - reactWave;
-      let armLiftCheer = 0;
-
-      // 4. Independent Head Stabilization & Natural Micro-Motions
+      // 3. Stabilized Head (real humans keep their head level while walking!)
       let headRot =
-        (-torsoLean * 0.55 + Math.sin(gp * 2 - 0.65) * 0.032) * mv +
-        u.lookAngle * idleScale +
-        Math.sin(t * 1.45 + seed) * 0.022 * idleScale;
-      let headLagY = Math.sin(gp * 2 - 0.75) * 0.012 * h * mv + breathRise * 0.6;
+        (-torsoLean * 0.55) * mv +
+        u.lookAngle * idleScale;
 
-      // 5. Role-specific natural human gestures when idle at station / stage / crowd
+      // 4. Role-specific gentle motions (only when idle at stage / crowd / training)
       let grooveKnee = 0;
+      let cheerArmLift = 0;
       if (idleScale > 0.15) {
         if (mode === "perform") {
-          const beat = t * 7.6 + seed;
+          // Grounded musical groove (~115 BPM) — calm rhythmic sway & nod, zero shaking
+          const beat = t * 4.6 + seed;
           const groove = Math.sin(beat);
-          const doubleBeat = Math.abs(Math.sin(beat));
-          grooveKnee = (1 - doubleBeat) * 0.042 * h * idleScale;
-          bodyBob += (doubleBeat * 0.055 - 0.025) * h * idleScale;
-          torsoLean += groove * 0.065 * idleScale;
-          headRot += Math.sin(beat - 0.35) * 0.095 * idleScale;
-          armAngL += Math.sin(beat) * 0.14 * idleScale;
-          armAngR += Math.cos(beat) * 0.14 * idleScale;
+          const pulse = (1 - Math.cos(beat * 2)) * 0.5;
+          grooveKnee = (1 - pulse) * 0.028 * h * idleScale;
+          bodyBob += pulse * 0.024 * h * idleScale;
+          torsoLean += groove * 0.036 * idleScale;
+          headRot += Math.sin(beat - 0.35) * 0.045 * idleScale;
         } else if (mode === "cheer") {
-          const beat = t * 8.2 + seed;
-          const pump = Math.sin(beat);
-          grooveKnee = Math.max(0, -pump) * 0.035 * h * idleScale;
-          bodyBob += Math.max(0, pump) * 0.05 * h * idleScale;
-          armLiftCheer = (pump * 0.5 + 0.5) * 0.095 * h * idleScale;
-          armAngL += pump * 0.18 * idleScale;
-          armAngR -= pump * 0.18 * idleScale;
-          headRot += Math.sin(beat - 0.2) * 0.06 * idleScale;
+          // Crowd glowstick pumping on beat + gentle knee bounce
+          const beat = t * 5.2 + seed;
+          const pump = (Math.sin(beat) + 1) * 0.5;
+          grooveKnee = (1 - pump) * 0.024 * h * idleScale;
+          bodyBob += pump * 0.026 * h * idleScale;
+          cheerArmLift = pump * 0.065 * h * idleScale;
+          headRot += Math.sin(beat - 0.25) * 0.03 * idleScale;
         } else if (mode === "training") {
-          const tr = Math.sin(t * 3.8 + seed);
-          bodyBob += Math.abs(tr) * 0.022 * h * idleScale;
-          headRot += tr * 0.05 * idleScale;
-          armAngL += tr * 0.08 * idleScale;
-          armAngR -= tr * 0.08 * idleScale;
-        } else {
-          const wk = Math.sin(t * 2.6 + seed);
-          armAngL += wk * 0.035 * idleScale;
-          armAngR -= wk * 0.03 * idleScale;
+          const tr = Math.sin(t * 2.4 + seed);
+          bodyBob += ((tr + 1) * 0.5) * 0.012 * h * idleScale;
+          headRot += tr * 0.026 * idleScale;
         }
       }
 
@@ -820,29 +806,23 @@
       this._deformLegPart(u.legL, u.hipLX, u.hipY, hipSwayX, bodyBob, grooveKnee, reactHop, legAngL, liftL, kneeL, legDepthL);
       this._deformLegPart(u.legR, u.hipRX, u.hipY, hipSwayX, bodyBob, grooveKnee, reactHop, legAngR, liftR, kneeR, legDepthR);
 
-      // Now deform the Upper Body + Arms + Head + Hair mesh (positioned slightly forward in Z)
+      // Now deform the Upper Body mesh cleanly (solid torso/props + subtle head tilt & hair breeze)
       const pos = u.upperGeo.attributes.position;
       const arr = pos.array;
       const n = u.baseX.length;
 
+      // Single-frequency smooth hair trail (never double-frequency jitter!)
       const hairFactor = rig.hairSway || 1.0;
-      const hairLag = (Math.sin(gp * 2 - 1.15) * 0.038 * mv + Math.sin(t * 1.9 + seed) * 0.015 * idleScale) * w * hairFactor;
+      const hairLag = (Math.sin(gp - 0.7) * 0.011 * mv + Math.sin(t * 1.35 + seed) * 0.006 * idleScale) * w * hairFactor;
 
       const cosLean = Math.cos(torsoLean);
       const sinLean = Math.sin(torsoLean);
       const cosHead = Math.cos(headRot);
       const sinHead = Math.sin(headRot);
-      const cosAL = Math.cos(armAngL);
-      const sinAL = Math.sin(armAngL);
-      const cosAR = Math.cos(armAngR);
-      const sinAR = Math.sin(armAngR);
 
       const hipY = u.hipY;
       const neckY = u.neckY;
       const hipCX = u.hipCenterX;
-      const shY = u.shY;
-      const shLX = u.shLX;
-      const shRX = u.shRX;
       const neckPivotX = hipCX + hipSwayX - (neckY - hipY) * sinLean;
       const neckPivotY = neckY + bodyBob + breathRise - grooveKnee;
       const upperZ = 0.026 * zSign;
@@ -851,38 +831,21 @@
         let x = u.baseX[i];
         let y = u.baseY[i];
 
-        // Upper body lean + pelvis bob + breathing
+        // Solid upper body lean + smooth pelvis ride + gentle breathing
         const rxU = x - hipCX;
         const ryU = y - hipY;
         x = hipCX + rxU * cosLean - ryU * sinLean + hipSwayX;
         y = hipY + rxU * sinLean + ryU * cosLean + bodyBob + breathRise - grooveKnee;
 
-        const wc = u.wChest[i];
-        if (wc > 0.001) {
-          x += (x - hipCX) * chestExpand * wc;
+        // Glowstick vertical lift ONLY during concert cheering (keeps props solid during normal walking!)
+        if (cheerArmLift > 0.001) {
+          const wa = u.wArmL[i] + u.wArmR[i];
+          if (wa > 0.001) {
+            y += cheerArmLift * u.armReach[i] * wa;
+          }
         }
 
-        // Natural Arm Swing & Cheer Pumping
-        const waL = u.wArmL[i];
-        if (waL > 0.001) {
-          const rx = x - shLX;
-          const ry = y - (shY + bodyBob - grooveKnee);
-          const aX = shLX + rx * cosAL - ry * sinAL;
-          const aY = (shY + bodyBob - grooveKnee) + rx * sinAL + ry * cosAL;
-          x += (aX - x) * waL;
-          y += (aY - y + armLiftCheer * u.armReach[i]) * waL;
-        }
-        const waR = u.wArmR[i];
-        if (waR > 0.001) {
-          const rx = x - shRX;
-          const ry = y - (shY + bodyBob - grooveKnee);
-          const aX = shRX + rx * cosAR - ry * sinAR;
-          const aY = (shY + bodyBob - grooveKnee) + rx * sinAR + ry * cosAR;
-          x += (aX - x) * waR;
-          y += (aY - y + armLiftCheer * u.armReach[i]) * waR;
-        }
-
-        // Independent Head Rotation locked cleanly onto Neck Pivot
+        // Calm, stabilized head rotation locked cleanly onto Neck Pivot
         const wh = u.wHead[i];
         if (wh > 0.001) {
           const rx = x - neckPivotX;
@@ -890,19 +853,17 @@
           const hX = neckPivotX + rx * cosHead - ry * sinHead;
           const hY = neckPivotY + rx * sinHead + ry * cosHead;
           x += (hX - x) * wh;
-          y += (hY - y + headLagY) * wh;
+          y += (hY - y) * wh;
         }
 
-        // Soft Secondary Hair / Coat-Tail Follow-Through
+        // Gentle secondary hair / coat-tail trail
         const whL = u.wHairL[i];
         const whR = u.wHairR[i];
         if (whL > 0.001) {
-          x += (hairLag + 0.03 * w * mv) * whL;
-          y += Math.abs(hairLag) * 0.22 * whL;
+          x += (hairLag + 0.015 * w * mv) * whL;
         }
         if (whR > 0.001) {
-          x += (hairLag + 0.03 * w * mv) * whR;
-          y += Math.abs(hairLag) * 0.22 * whR;
+          x += (hairLag + 0.015 * w * mv) * whR;
         }
 
         const idx3 = i * 3;
@@ -914,11 +875,11 @@
       pos.needsUpdate = true;
 
       if (u.shadow) {
-        const sScale = 1 - Math.min(0.28, (bodyBob / h) * 1.4);
-        u.shadow.scale.set(sScale * (1 + mv * 0.08), sScale, 1);
+        const sScale = 1 - Math.min(0.22, (bodyBob / h) * 1.2);
+        u.shadow.scale.set(sScale * (1 + mv * 0.06), sScale, 1);
       }
       if (u.badge) {
-        u.badge.position.y = h + 0.24 + bodyBob * 0.85;
+        u.badge.position.y = h + 0.24 + bodyBob * 0.65;
       }
     }
 
@@ -1062,13 +1023,13 @@
         u.reactTimer = Math.max(0, u.reactTimer - dt);
       }
 
-      // Natural idle look-around head tilt timer
+      // Natural idle look-around head tilt timer (calm & subtle)
       u.lookTimer -= dt;
       if (u.lookTimer <= 0) {
-        u.lookTimer = 2.0 + Math.random() * 3.2;
-        u.lookTarget = (Math.random() - 0.5) * 0.13;
+        u.lookTimer = 2.8 + Math.random() * 3.8;
+        u.lookTarget = (Math.random() - 0.5) * 0.085;
       }
-      u.lookAngle += (u.lookTarget - u.lookAngle) * Math.min(1, dt * 3.5);
+      u.lookAngle += (u.lookTarget - u.lookAngle) * Math.min(1, dt * 2.2);
 
       const isWalking = dist > 0.06;
       if (isWalking) {
@@ -1106,17 +1067,17 @@
           u.turnTarget = screenMoveX > 0 ? Math.PI : 0;
         }
 
-        // Advance stride phase strictly proportional to real ground distance covered (zero foot sliding!)
-        u.gaitPhase += step * 6.2;
-        u.moveBlend += (1 - u.moveBlend) * Math.min(1, dt * 9.5);
+        // Advance stride phase strictly proportional to real ground distance covered (relaxed human cadence)
+        u.gaitPhase += step * 4.8;
+        u.moveBlend += (1 - u.moveBlend) * Math.min(1, dt * 7.5);
       } else {
         // Smoothly settle back to neutral standing stance
-        u.moveBlend += (0 - u.moveBlend) * Math.min(1, dt * 8.0);
+        u.moveBlend += (0 - u.moveBlend) * Math.min(1, dt * 6.5);
         if (u.moveBlend < 0.005) u.moveBlend = 0;
       }
 
       // Smooth 3D paper-doll Y-turn instead of jarring instant mirror-snap!
-      u.turnAngle += (u.turnTarget - u.turnAngle) * Math.min(1, dt * 11.5);
+      u.turnAngle += (u.turnTarget - u.turnAngle) * Math.min(1, dt * 9.5);
       u.pivot.rotation.y = this.yaw + u.turnAngle;
 
       // Deform the skeletal mesh with real alternating leg strides, pelvis bob, arm swing & head stabilization
