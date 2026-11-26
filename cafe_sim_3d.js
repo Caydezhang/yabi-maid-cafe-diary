@@ -126,10 +126,6 @@
       if ("outputEncoding" in this.renderer && T.sRGBEncoding) {
         this.renderer.outputEncoding = T.sRGBEncoding;
       }
-      if ("ACESFilmicToneMapping" in T) {
-        this.renderer.toneMapping = T.ACESFilmicToneMapping;
-        this.renderer.toneMappingExposure = 0.96;
-      }
       this.container.insertBefore(this.renderer.domElement, this.container.firstChild);
 
       this._buildLights();
@@ -275,14 +271,10 @@
       const T = window.THREE;
       this.scene.add(new T.HemisphereLight(0xffe6f7, 0x261a38, 0.92));
 
-      const sun = new T.DirectionalLight(0xfff4ea, 0.92);
-      sun.position.set(-5, 14, 11);
+      const sun = new T.DirectionalLight(0xfff0dd, 0.85);
+      sun.position.set(-7, 15, 10);
       sun.castShadow = true;
       sun.shadow.mapSize.set(1024, 1024);
-      sun.shadow.camera.left = -9;
-      sun.shadow.camera.right = 9;
-      sun.shadow.camera.top = 9;
-      sun.shadow.camera.bottom = -9;
       this.scene.add(sun);
 
       const barWarm = new T.PointLight(0xffb469, 1.5, 11);
@@ -519,32 +511,133 @@
       ctx.textBaseline = "middle";
       ctx.fillText(text, 140, 35);
       const sp = new T.Sprite(new T.SpriteMaterial({ map: new T.CanvasTexture(c), transparent: true, depthTest: false }));
-      sp.scale.set(1.16, 0.28, 1);
+      sp.scale.set(1.52, 0.37, 1);
       return sp;
     }
 
     _createStandeeActor(texKey, label, badgeCol, charH, quoteText) {
       const T = window.THREE;
+      const root = new T.Group();
+      const rig = RIG_PROFILES[texKey] || {
+        splitU: 0.5, legMinU: 0.22, legMaxU: 0.78, hipV: 0.29, neckV: 0.62, strideAmp: 0.28, armAmp: 0.10, hairSway: 1.0
+      };
+      const parts = this._loadRigPartTextures(texKey, rig);
       const h = charH || 1.88;
-      const built = window.CHAR_3D_BUILDER.create3DCharacter(T, texKey, h);
-      const root = built.root;
+      const w = h * parts.aspect;
+      const hipOverlap = parts.hipOverlap;
 
-      // Soft ground contact shadow + subtle character aura ring
+      // Soft ground contact shadow + subtle aura ring
       const shadow = new T.Mesh(
-        new T.CircleGeometry(0.42, 22),
-        new T.MeshBasicMaterial({ color: 0x07040e, transparent: true, opacity: 0.45 })
+        new T.CircleGeometry(0.45, 22),
+        new T.MeshBasicMaterial({ color: 0x07040e, transparent: true, opacity: 0.60 })
       );
       shadow.rotation.x = -Math.PI / 2;
-      shadow.position.y = 0.018;
+      shadow.position.y = 0.02;
       root.add(shadow);
 
       const ring = new T.Mesh(
-        new T.RingGeometry(0.38, 0.44, 24),
-        new T.MeshBasicMaterial({ color: badgeCol, transparent: true, opacity: 0.40, side: T.DoubleSide })
+        new T.RingGeometry(0.41, 0.47, 24),
+        new T.MeshBasicMaterial({ color: badgeCol, transparent: true, opacity: 0.42, side: T.DoubleSide })
       );
       ring.rotation.x = -Math.PI / 2;
-      ring.position.y = 0.024;
+      ring.position.y = 0.025;
       root.add(ring);
+
+      const pivot = new T.Group();
+      root.add(pivot);
+
+      const hipY = rig.hipV * h;
+      const neckY = rig.neckV * h;
+      const hipCenterX = (rig.splitU - 0.5) * w;
+      const hipLX = ((rig.legMinU + rig.splitU) * 0.5 - 0.5) * w;
+      const hipRX = ((rig.splitU + rig.legMaxU) * 0.5 - 0.5) * w;
+      const shY = (rig.neckV - 0.05) * h;
+      const shLX = (rig.splitU - 0.14) * w - 0.5 * w;
+      const shRX = (rig.splitU + 0.14) * w - 0.5 * w;
+
+      // Helper to build an independent deformable leg mesh (ZERO shared vertices between left & right shoes!)
+      const buildLegMesh = (u0, u1, tex) => {
+        const legW = Math.max(0.05, (u1 - u0) * w);
+        const legH = Math.min(1, rig.hipV + hipOverlap) * h;
+        const geo = new T.PlaneGeometry(legW, legH, 6, 10);
+        const cx = ((u0 + u1) * 0.5 - 0.5) * w;
+        geo.translate(cx, legH * 0.5, 0);
+        const pos = geo.attributes.position;
+        const count = pos.count;
+        const bx = new Float32Array(count);
+        const by = new Float32Array(count);
+        const reach = new Float32Array(count);
+        const knee = new Float32Array(count);
+        for (let i = 0; i < count; i++) {
+          const x = pos.getX(i);
+          const y = pos.getY(i);
+          bx[i] = x;
+          by[i] = y;
+          const r = clamp01((hipY - y) / Math.max(0.05, hipY));
+          reach[i] = r;
+          knee[i] = Math.sin(r * Math.PI);
+        }
+        const mesh = new T.Mesh(
+          geo,
+          new T.MeshBasicMaterial({ map: tex, transparent: true, alphaTest: 0.08, side: T.DoubleSide })
+        );
+        pivot.add(mesh);
+        return { mesh, geo, bx, by, reach, knee };
+      };
+
+      const legL = buildLegMesh(rig.legMinU, rig.splitU, parts.legLTex);
+      const legR = buildLegMesh(rig.splitU, rig.legMaxU, parts.legRTex);
+
+      // Upper Body + Skirt/Coat Hem + Arms + Head + Hair/Coat-Tails mesh (sits cleanly in front of thighs)
+      const upperGeo = new T.PlaneGeometry(w, h, 16, 22);
+      upperGeo.translate(0, h * 0.5, 0);
+      const posAttr = upperGeo.attributes.position;
+      const uvAttr = upperGeo.attributes.uv;
+      const count = posAttr.count;
+
+      const baseX = new Float32Array(count);
+      const baseY = new Float32Array(count);
+      const wChest = new Float32Array(count);
+      const wArmL = new Float32Array(count);
+      const wArmR = new Float32Array(count);
+      const armReach = new Float32Array(count);
+      const wHead = new Float32Array(count);
+      const wHairL = new Float32Array(count);
+      const wHairR = new Float32Array(count);
+
+      for (let i = 0; i < count; i++) {
+        baseX[i] = posAttr.getX(i);
+        baseY[i] = posAttr.getY(i);
+        const u = uvAttr.getX(i);
+        const v = uvAttr.getY(i);
+
+        wChest[i] =
+          smoothstep(rig.hipV + 0.04, rig.hipV + 0.14, v) *
+          (1 - smoothstep(rig.neckV - 0.04, rig.neckV + 0.05, v));
+
+        const armV =
+          smoothstep(rig.hipV + 0.02, rig.hipV + 0.11, v) *
+          (1 - smoothstep(rig.neckV - 0.03, rig.neckV + 0.04, v));
+        const leftArmU = 1 - smoothstep(rig.splitU - 0.25, rig.splitU - 0.13, u);
+        const rightArmU = smoothstep(rig.splitU + 0.13, rig.splitU + 0.25, u);
+        wArmL[i] = armV * leftArmU;
+        wArmR[i] = armV * rightArmU;
+        armReach[i] = clamp01((rig.neckV - v) / Math.max(0.08, rig.neckV - rig.hipV));
+
+        wHead[i] = smoothstep(rig.neckV - 0.035, rig.neckV + 0.05, v);
+
+        const outerL = 1 - smoothstep(rig.legMinU - 0.02, rig.legMinU + 0.05, u);
+        const outerR = smoothstep(rig.legMaxU - 0.05, rig.legMaxU + 0.02, u);
+        const tailV = 1 - smoothstep(rig.neckV + 0.12, 0.96, v);
+        wHairL[i] = outerL * tailV;
+        wHairR[i] = outerR * tailV;
+      }
+
+      const standee = new T.Mesh(
+        upperGeo,
+        new T.MeshBasicMaterial({ map: parts.upperTex, transparent: true, alphaTest: 0.08, side: T.DoubleSide })
+      );
+      pivot.add(standee);
 
       let badge = null;
       if (label) {
@@ -554,34 +647,48 @@
       }
 
       root.userData = {
-        rigRoot: built.rigRoot,
-        joints: built.joints,
-        faceMat: built.faceMat,
-        faceTex: built.faceTex,
-        spec: built.spec,
-        baseHipY: built.baseHipY,
-        scaleFactor: built.scaleFactor,
-        pickMeshes: built.pickMeshes,
+        pivot,
+        standee,
+        legL,
+        legR,
         shadow,
         badge,
         quote: quoteText || "💖 欢迎光临 404~",
         badgeCol,
         baseH: h,
-        // Live 3D kinematic state
+        baseW: w,
+        rig,
+        hipY,
+        neckY,
+        hipCenterX,
+        hipLX,
+        hipRX,
+        shY,
+        shLX,
+        shRX,
+        upperGeo,
+        baseX,
+        baseY,
+        wChest,
+        wArmL,
+        wArmR,
+        armReach,
+        wHead,
+        wHairL,
+        wHairR,
+        // Live kinematic state
         gaitPhase: Math.random() * Math.PI * 2,
         moveBlend: 0,
-        facingY: 0,
-        targetFacingY: 0,
-        idleFacingY: 0,
+        turnAngle: 0,
+        turnTarget: 0,
         reactTimer: 0,
-        blinkTimer: 1.5 + Math.random() * 3.0,
-        blinkState: false,
         lookAngle: 0,
         lookTarget: 0,
-        lookTilt: 0,
-        lookTiltTarget: 0,
-        lookTimer: 1.8 + Math.random() * 3.0
+        lookTimer: 1.5 + Math.random() * 3.0
       };
+      standee.userData.actorRoot = root;
+      legL.mesh.userData.actorRoot = root;
+      legR.mesh.userData.actorRoot = root;
       this.scene.add(root);
       return root;
     }
@@ -902,14 +1009,7 @@
       setTimeout(() => el.remove(), 1600);
     }
 
-    _wrapAngleDiff(target, current) {
-      let diff = target - current;
-      while (diff > Math.PI) diff -= Math.PI * 2;
-      while (diff < -Math.PI) diff += Math.PI * 2;
-      return diff;
-    }
-
-    _updateStandeeMotion(mesh, target, speed, dt, seed, animMode, idleFaceY) {
+    _updateStandeeMotion(mesh, target, speed, dt, seed, animMode) {
       const dx = target.x - mesh.position.x;
       const dz = target.z - mesh.position.z;
       const dy = (target.y || 0) - mesh.position.y;
@@ -923,19 +1023,17 @@
         u.reactTimer = Math.max(0, u.reactTimer - dt);
       }
 
-      // Natural idle look-around head turn & slight tilt
+      // Natural idle look-around head tilt timer (calm & subtle)
       u.lookTimer -= dt;
       if (u.lookTimer <= 0) {
-        u.lookTimer = 2.6 + Math.random() * 3.6;
-        u.lookTarget = (Math.random() - 0.5) * 0.42;
-        u.lookTiltTarget = (Math.random() - 0.5) * 0.12;
+        u.lookTimer = 2.8 + Math.random() * 3.8;
+        u.lookTarget = (Math.random() - 0.5) * 0.085;
       }
-      u.lookAngle += (u.lookTarget - u.lookAngle) * Math.min(1, dt * 2.4);
-      u.lookTilt += (u.lookTiltTarget - u.lookTilt) * Math.min(1, dt * 2.4);
+      u.lookAngle += (u.lookTarget - u.lookAngle) * Math.min(1, dt * 2.2);
 
-      const isWalking = dist > 0.07;
+      const isWalking = dist > 0.06;
       if (isWalking) {
-        // Gentle deceleration near destination for natural human stopping
+        // Gentle acceleration / deceleration near destination for natural human stopping!
         const easeFactor = dist < 0.45 ? 0.45 + 0.55 * (dist / 0.45) : 1.0;
         const step = Math.min(dist, speed * easeFactor * dt);
         let dirX = dx / dist;
@@ -945,7 +1043,7 @@
         for (let oi = 0; oi < WALK_OBSTACLES.length; oi++) {
           const ob = WALK_OBSTACLES[oi];
           const toGoalOb = Math.hypot(target.x - ob.x, target.z - ob.z);
-          if (toGoalOb < ob.r * 0.85) continue;
+          if (toGoalOb < ob.r * 0.85) continue; // destination itself is beside this table
           const ox = mesh.position.x - ob.x;
           const oz = mesh.position.z - ob.z;
           const od = Math.hypot(ox, oz);
@@ -962,27 +1060,28 @@
         mesh.position.x += dirX * step;
         mesh.position.z += dirZ * step;
 
-        // True 360-degree 3D heading toward movement direction!
-        u.targetFacingY = Math.atan2(dirX, dirZ);
-
-        // Stride phase locked strictly to real ground distance covered (zero foot sliding!)
-        u.gaitPhase += step * 5.2;
-        u.moveBlend += (1 - u.moveBlend) * Math.min(1, dt * 8.0);
-      } else {
-        // Turn smoothly toward logical station/audience direction when idle!
-        if (typeof idleFaceY === "number") {
-          u.targetFacingY = idleFaceY;
+        // Project movement onto current camera screen-right vector so turning matches camera view!
+        const screenMoveX = dirX * Math.cos(this.yaw) - dirZ * Math.sin(this.yaw);
+        if (Math.abs(screenMoveX) > 0.08) {
+          // Sprites naturally face slightly left (-X); rotate Y by PI to face right (+X)
+          u.turnTarget = screenMoveX > 0 ? Math.PI : 0;
         }
-        u.moveBlend += (0 - u.moveBlend) * Math.min(1, dt * 7.0);
+
+        // Advance stride phase strictly proportional to real ground distance covered (relaxed human cadence)
+        u.gaitPhase += step * 4.8;
+        u.moveBlend += (1 - u.moveBlend) * Math.min(1, dt * 7.5);
+      } else {
+        // Smoothly settle back to neutral standing stance
+        u.moveBlend += (0 - u.moveBlend) * Math.min(1, dt * 6.5);
         if (u.moveBlend < 0.005) u.moveBlend = 0;
       }
 
-      // Smooth shortest-arc 360-deg rotation of the 3D character body!
-      u.facingY += this._wrapAngleDiff(u.targetFacingY, u.facingY) * Math.min(1, dt * 8.5);
-      u.rigRoot.rotation.y = u.facingY;
+      // Smooth 3D paper-doll Y-turn instead of jarring instant mirror-snap!
+      u.turnAngle += (u.turnTarget - u.turnAngle) * Math.min(1, dt * 9.5);
+      u.pivot.rotation.y = this.yaw + u.turnAngle;
 
-      // Drive the 14-joint 3D humanoid skeleton!
-      window.CHAR_3D_BUILDER.animate3DCharacter(u, this.clock, dt, seed, animMode);
+      // Deform the skeletal mesh with real alternating leg strides, pelvis bob, arm swing & head stabilization
+      this._deformActorRig(u, this.clock, seed, animMode);
 
       return !isWalking;
     }
@@ -1009,24 +1108,14 @@
           this.chekiLight.intensity = 1.6 + this.flashTimer * 16.0;
         }
 
-        // Staff update with natural station patrol routines & logical 3D facing
+        // Staff update with natural station patrol routines
         this.staff.forEach((st) => {
           if (!st.mesh.visible) return;
           const animMode =
             st.role === "performing" ? "perform" :
             st.role === "training" ? "training" : "station";
-          let idleFaceY = 0;
-          if (st.role === "performing") {
-            idleFaceY = 0.05; // Face B1 audience (+Z)
-          } else if (st.id === "luchen") {
-            idleFaceY = this.currentFocus === "evening" ? Math.PI : 0.15; // Face customers or B1 stage
-          } else if (st.id === "mahiru") {
-            idleFaceY = 0.1; // Face Cheki camera / guests (+Z)
-          } else if (st.id === "millie") {
-            idleFaceY = 0.55; // Peek out toward cafe floor
-          }
           const arrived = this._updateStandeeMotion(
-            st.mesh, st.target, st.speed, dt, st.seed, animMode, idleFaceY
+            st.mesh, st.target, st.speed, dt, st.seed, animMode
           );
           if (arrived) {
             st.waitTimer -= dt;
@@ -1073,11 +1162,7 @@
         for (let i = this.guests.length - 1; i >= 0; i--) {
           const g = this.guests[i];
           const animMode = g.state === "enjoying" && g.activity === "concert" ? "cheer" : "station";
-          // Guests face the stage (-Z) at concerts or Cheki booth (-Z) during Polaroid photos!
-          const guestFaceY =
-            g.activity === "concert" ? Math.PI :
-            g.activity === "cheki" ? Math.PI : 0.25;
-          const arrived = this._updateStandeeMotion(g.mesh, g.target, g.speed, dt, g.seed, animMode, guestFaceY);
+          const arrived = this._updateStandeeMotion(g.mesh, g.target, g.speed, dt, g.seed, animMode);
           if (arrived) {
             if (g.state === "entering") {
               g.state = "enjoying";
@@ -1145,14 +1230,18 @@
         const meshes = [];
         this.staff.forEach((st) => {
           const u = st.mesh.userData;
-          if (st.mesh.visible && u && u.pickMeshes) {
-            meshes.push(...u.pickMeshes);
+          if (st.mesh.visible && u) {
+            if (u.standee) meshes.push(u.standee);
+            if (u.legL && u.legL.mesh) meshes.push(u.legL.mesh);
+            if (u.legR && u.legR.mesh) meshes.push(u.legR.mesh);
           }
         });
         this.guests.forEach((g) => {
           const u = g.mesh.userData;
-          if (u && u.pickMeshes) {
-            meshes.push(...u.pickMeshes);
+          if (u) {
+            if (u.standee) meshes.push(u.standee);
+            if (u.legL && u.legL.mesh) meshes.push(u.legL.mesh);
+            if (u.legR && u.legR.mesh) meshes.push(u.legR.mesh);
           }
         });
 
