@@ -2,45 +2,41 @@ window.GAME_STORIES = {
   "prologue_story": {
     "bg": "cafe1f",
     "cg": "prologueAlley",
-    "loc": "序章 · 逃离优绩塔尖与后巷的 404",
-    "sub": "10月06日 · 暴雨夜 · 在一切开始之前",
+    "loc": "序章 · 404 后巷",
+    "sub": "10月06日 · 夜雨",
     "lines": [
       {
         "speaker": "旁白",
         "cg": "prologueAlley",
         "unlockDossier": "luchen",
-        "text": "10月6日凌晨三点，城市CBD第42层。这是陆沉作为头部互联网大厂P8首席架构师拿下的第三个年度S级绩效——也是他决定彻底掀桌的那个夜晚。",
-        "voice": "game_assets/voices/prologue_story_00.mp3",
-        "spokenText": "10月6日凌晨三点，城市CBD第42层。这是陆沉作为头部互联网大厂P8首席架构师拿下的第三个年度S级绩效，也是他决定彻底掀桌的那个夜晚。"
+        "text": "10月6日凌晨三点，写字楼42层还亮着半层灯。陆沉刚签完年度绩效表，电脑右下角弹出人事发的续约邮件——再熬一年，剩下的股票就归属了。",
+        "voice": "game_assets/voices/prologue_story_00.mp3"
       },
       {
-        "speaker": "陆沉（内心独白）",
-        "tag": "前大厂P8 · 30岁",
+        "speaker": "陆沉",
+        "tag": "前互联网架构师 · 30岁",
         "cg": "prologueAlley",
-        "text": "“两小时前，组里那个为了冲转正KPI连续熬了四个通宵的实习生，在消防通道里胃穿孔吐了一地血。而救护车还没开出地库，高管群弹出的第一条消息却是：先把词条压下去，别影响下周财报路演。”",
-        "voice": "game_assets/voices/prologue_story_01.mp3",
-        "spokenText": "两小时前，组里那个为了冲转正KPI连续熬了四个通宵的实习生，在消防通道里胃穿孔吐了一地血。而救护车还没开出地库，高管群弹出的第一条消息却是：先把词条压下去，别影响下周财报路演。"
+        "text": "“两小时前，组里刚转正的小伙子在楼梯间吐了血，救护车刚拉走，总监在群里发的第一条消息是：把工位收拾干净，别让明天来参观的客户看见。”",
+        "voice": "game_assets/voices/prologue_story_01.mp3"
       },
       {
         "speaker": "旁白",
         "cg": "prologueAlley",
-        "text": "早上九点，陆沉把辞职信和价值两百万的未归属期权放弃书一起拍在了副总裁桌上。他撑着一把黑伞走出写字楼，鬼使神差地拐进了平时深夜买咖啡的那条潮湿后巷——停在了亮着粉紫色霓虹灯的『404 女仆喫茶 & Live』门前。",
-        "voice": "game_assets/voices/prologue_story_02.mp3",
-        "spokenText": "早上九点，陆沉把辞职信和价值两百万的未归属期权放弃书一起拍在了副总裁桌上。他撑着一把黑伞走出写字楼，鬼使神差地拐进了平时深夜买咖啡的那条潮湿后巷，停在了亮着粉紫色霓虹灯的『404 女仆喫茶 & Live』门前。"
+        "text": "早上九点，他把辞职单和工牌一起放在了前台。雨下了一整天，傍晚路过平时常去买美式的那条旧巷子，看见街尾那家『404 女仆喫茶』门口贴着白纸黑字的转让告示，粉紫色的霓虹灯牌坏了一角，滋滋闪着。",
+        "voice": "game_assets/voices/prologue_story_02.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "bg": "cafe1f",
         "sprites": [
           "luchen:normal"
         ],
-        "text": "（推开贴着转让封条的玻璃门，店里一片狼藉，只有四个年轻女孩正守着行李不肯散场）“打扰了。请问这里是 404 喫茶吗？”",
-        "voice": "game_assets/voices/prologue_story_03.mp3",
-        "spokenText": "打扰了。请问这里是 404 喫茶吗？"
+        "text": "他推开没上锁的玻璃门。屋里堆着几个没封口的纸箱，四个姑娘守在吧台边谁也没走。\n“打扰一下，门没锁。请问这儿还在营业吗？”",
+        "voice": "game_assets/voices/prologue_story_03.mp3"
       },
       {
         "speaker": "林真昼",
-        "tag": "初遇 · NO.01 地雷系销冠",
+        "tag": "NO.01 · 拍切担当",
         "bg": "cafe1f",
         "sprites": [
           "mahiru:normal",
@@ -48,25 +44,23 @@ window.GAME_STORIES = {
         ],
         "speaking": 0,
         "unlockDossier": "mahiru",
-        "text": "（坐在吧台高脚凳上晃着十厘米的厚底玛丽珍鞋，手里转着贴满水钻的翻盖痛机，斜眼打量你）“哟，穿得人模狗样的，你是房东派来收房子的律师，还是来看笑话的？先说好哦，前任老板还欠本销冠三百二十块拍立得提成，不结清我今天就睡在收银台上了！”",
-        "voice": "game_assets/voices/prologue_story_04.mp3",
-        "spokenText": "哟，穿得人模狗样的，你是房东派来收房子的律师，还是来看笑话的？先说好哦，前任老板还欠本销冠三百二十块拍立得提成，不结清我今天就睡在收银台上了！"
+        "text": "“啧，穿得跟房产中介似的，收房的还是来催债的？先说清楚啊，上个跑路老板还欠我三百二十块拍立得提成，不给钱我今晚就睡收银台底下。”",
+        "voice": "game_assets/voices/prologue_story_04.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "bg": "cafe1f",
         "sprites": [
           "mahiru:normal",
           "luchen:normal"
         ],
         "speaking": 1,
-        "text": "（看了一眼她脚边写满精准心算流水的烟盒背面，和她左锁骨蕾丝领口别着的一枚生锈安全别针，从皮夹抽出三百二十块现金压在她手机下）“我不是收房子的。我是刚把这间店盘下来的新店长，陆沉。上个月欠你的提成，结清了。”",
-        "voice": "game_assets/voices/prologue_story_05.mp3",
-        "spokenText": "我不是收房子的。我是刚把这间店盘下来的新店长，陆沉。上个月欠你的提成，结清了。"
+        "text": "陆沉扫了眼她手边写满密密麻麻数字的烟盒背面，从钱包数出三百二十块压在吧台上。\n“不是收房的。刚签完转让合同，我叫陆沉。欠你的提成先结清，以后每月十号准时发。”",
+        "voice": "game_assets/voices/prologue_story_05.mp3"
       },
       {
         "speaker": "陈琥珀",
-        "tag": "初遇 · NO.03 涩谷辣妹裁缝",
+        "tag": "NO.03 · 主厨兼裁缝",
         "bg": "cafe1f",
         "sprites": [
           "kohaku:normal",
@@ -74,13 +68,12 @@ window.GAME_STORIES = {
         ],
         "speaking": 0,
         "unlockDossier": "kohaku",
-        "text": "（拎着一柄扳手和一锅热气腾腾的排骨汤从后厨冲出来，金粉狼尾发梢还沾着雨水）“等等！你真是新老板？！那我可得把丑话说前头——角落那台重机缝纫机是我自己掏钱买的，还有我每天下午四点半得去市三院给我外婆送汤，你要是敢搞黑心老板扣全勤那套，老娘现在就把扳手撂这儿！”",
-        "voice": "game_assets/voices/prologue_story_06.mp3",
-        "spokenText": "等等！你真是新老板？！那我可得把丑话说前头，角落那台重机缝纫机是我自己掏钱买的，还有我每天下午四点半得去市三院给我外婆送汤，你要是敢搞黑心老板扣全勤那套，老娘现在就把扳手撂这儿！"
+        "text": "后厨帘子一掀，一个金粉短发姑娘端着半锅排骨汤走出来，围裙上还沾着油点。\n“真接手啊？那丑话说前头——角落那台缝纫机是我自己买的，还有我每天下午四点半得去市三院给外婆送饭。要扣全勤的话，我这就收拾东西。”",
+        "voice": "game_assets/voices/prologue_story_06.mp3"
       },
       {
         "speaker": "白石零音",
-        "tag": "初遇 · NO.02 暗黑地偶主唱",
+        "tag": "NO.02 · B1 乐队主唱",
         "bg": "cafe1f",
         "sprites": [
           "reine:glasses",
@@ -88,13 +81,12 @@ window.GAME_STORIES = {
         ],
         "speaking": 0,
         "unlockDossier": "reine",
-        "text": "（B1地下室的铁门被推开，一个长发少女架着500度厚底黑框眼镜走上来，手里握着缠满白绷带的战损麦克风，冷冷地眯眼审视你）“一楼女仆店怎么折腾我不管。但如果新老板打算把B1的地下舞台拆了改仓库……我现在就背琴走人。”",
-        "voice": "game_assets/voices/prologue_story_07.mp3",
-        "spokenText": "一楼女仆店怎么折腾我不管。但如果新老板打算把B1的地下舞台拆了改仓库……我现在就背琴走人。"
+        "text": "地下室铁门哐当一声推开，戴着厚框眼镜的长发女生走上台阶，手里攥着一把旧贝斯调音器。\n“楼上卖咖啡还是卖女仆我不管。敢把 B1 舞台拆了改仓库，我现在就走。”",
+        "voice": "game_assets/voices/prologue_story_07.mp3"
       },
       {
         "speaker": "苏千禧",
-        "tag": "初遇 · NO.04 Y2K赛博幽灵",
+        "tag": "NO.04 · 宣发与杂务",
         "bg": "cafe1f",
         "sprites": [
           "millie:normal",
@@ -102,12 +94,11 @@ window.GAME_STORIES = {
         ],
         "speaking": 0,
         "unlockDossier": "millie",
-        "text": "（吧台最里侧的黑色蕾丝防窥帘掀开一条缝，戴着发光猫耳耳机的少女用改装掌机挡着半张脸，把一纸《90天限期清退与跨年千人Live对赌协议》推到你面前，小声说）“……新店长，现在反悔还来得及。白昼娱乐要吞掉整条后巷，除非我们能在跨年夜办成千人原创Live，而且每周还要交齐高额房租……”",
-        "voice": "game_assets/voices/prologue_story_08.mp3",
-        "spokenText": "……新店长，现在反悔还来得及。白昼娱乐要吞掉整条后巷，除非我们能在跨年夜办成千人原创Live，而且每周还要交齐高额房租……"
+        "text": "吧台最里头的黑帘子撩开一条缝，一只手把几页折得皱巴巴的补充条款推了出来。\n“……新老板，现在反悔还来得及。对面娱乐公司要打包收这条街，房东签了附带条件——跨年夜前凑不齐一千人进场看原创 Live，或者中间哪期房租断了，店直接清退。”",
+        "voice": "game_assets/voices/prologue_story_08.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "bg": "cafe1f",
         "sprites": [
           "luchen:normal",
@@ -116,29 +107,27 @@ window.GAME_STORIES = {
         "speaking": 0,
         "choices": [
           {
-            "label": "▶ 签下对赌：“看够了大厂 KPI，未来 90 天 404 我保定了。”",
+            "label": "“行，这九十天我来扛，店不关。”",
             "nextLine": 10
           },
           {
-            "label": "▶ 签下对赌：“B1 舞台不拆，我陪你们把白昼娱乐的脸打肿。”",
+            "label": "“B1 舞台留着，跨年那天照常开演。”",
             "nextLine": 10
           }
         ],
-        "text": "（看着眼前这四个满身是刺、却又死死守着这间破店不肯走的女孩，陆沉拿起吧台上的钢笔，拔开了笔帽）“把合同翻到签名页吧。”",
-        "voice": "game_assets/voices/prologue_story_09.mp3",
-        "spokenText": "把合同翻到签名页吧。"
+        "text": "陆沉把那几页纸翻了一遍，从上衣口袋摸出笔。\n“就这些？那把签字页翻出来吧。”",
+        "voice": "game_assets/voices/prologue_story_09.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "bg": "cafe1f",
         "sprites": [
           "luchen:normal",
           "reine:glasses"
         ],
         "speaking": 0,
-        "text": "（在90天对赌协议上签下『陆沉』两个字，推了推银框眼镜，露出一抹温和却疯劲十足的笑）“签好了。从今天起，404 只有两条店规：第一，绝不搞 007 强制加班，谁累了直接休假；第二，在这间店里不用考一百分，天塌下来老板先顶着。”",
-        "voice": "game_assets/voices/prologue_story_10.mp3",
-        "spokenText": "签好了。从今天起，404 只有两条店规：第一，绝不搞 007 强制加班，谁累了直接休假；第二，在这间店里不用考一百分，天塌下来老板先顶着。"
+        "text": "签完字，他把合同推回去，顺手把吧台边歪掉的咖啡杯摆正。\n“店里规矩简单：不加班、不打卡扣钱，谁撑不住了直接请假。剩下的账和房租，我来想办法。”",
+        "voice": "game_assets/voices/prologue_story_10.mp3"
       },
       {
         "speaker": "苏千禧",
@@ -149,48 +138,45 @@ window.GAME_STORIES = {
         ],
         "speaking": 0,
         "isPrologueEnd": true,
-        "text": "（千禧头顶的猫耳耳机第一次闪起了代表安心的粉光，她把一台装好店铺管理系统的平板递给你）“那……欢迎入伙，陆店长！我已经把店铺的【反007排班】和【一日四时段运营系统】部署好了，现在让我手把手带你跑一遍第一天的试营业吧！”",
-        "voice": "game_assets/voices/prologue_story_11.mp3",
-        "spokenText": "那……欢迎入伙，陆店长！我已经把店铺的反007排班和一日四时段运营系统部署好了，现在让我手把手带你跑一遍第一天的试营业吧！"
+        "text": "帘子后面安静了两秒，千禧把一台贴满贴纸的旧平板推了出来。\n“……行吧，那明天正式开工。排班表和账本我都整理进平板里了，你先熟悉一下。”",
+        "voice": "game_assets/voices/prologue_story_11.mp3"
       }
     ]
   },
   "opening_day": {
     "bg": "cafe1f",
-    "loc": "1F · 404 女仆喫茶前厅",
-    "sub": "第1周 · 周一 (10/07) · 首日试营业与新手引导",
+    "loc": "1F · 404 女仆喫茶",
+    "sub": "第1周 · 周一 (10/07) · 试营业首日",
     "lines": [
       {
         "speaker": "苏千禧",
-        "tag": "NO.04 · 店铺系统管理员",
+        "tag": "NO.04 · 宣发与账目",
         "sprites": [
           "millie:happy",
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "“店长早上好！请看屏幕右侧的【四时段排班运营】面板——我已经为你开启了 6 步实机引导，跟着金色高亮框点选一圈，三分钟就能完全掌握怎么经营我们 404 啦！”",
-        "voice": "game_assets/voices/opening_day_00.mp3",
-        "spokenText": "店长早上好！请看屏幕右侧的四时段排班运营面板，我已经为你开启了 6 步实机引导，跟着金色高亮框点选一圈，三分钟就能完全掌握怎么经营我们 404 啦！"
+        "text": "“早啊店长。平板里把每天的排班、备场、营业和晚上演出都按时段列好了，头两天先照着提示走一遍，顺手了就很快。”",
+        "voice": "game_assets/voices/opening_day_00.mp3"
       },
       {
         "speaker": "林真昼",
-        "tag": "NO.01 · 地雷系销冠",
+        "tag": "NO.01 · 拍切担当",
         "sprites": [
           "mahiru:normal",
           "kohaku:normal"
         ],
         "speaking": 0,
-        "text": "“喂陆沉，我昨晚为了算清前任老板留下的烂账熬到凌晨三点，现在精神压力已经 68% 了哦！你要是真像昨天发誓那样不当黑心老板，就看你今天怎么排班了~”",
-        "voice": "game_assets/voices/opening_day_01.mp3",
-        "spokenText": "喂陆沉，我昨晚为了算清前任老板留下的烂账熬到凌晨三点，现在精神压力已经 68% 了哦！你要是真像昨天发誓那样不当黑心老板，就看你今天怎么排班了。"
+        "text": "真昼打着哈欠趴在吧台上，眼底下挂着两道淡青色。\n“昨晚帮着对前任留下的烂账熬到三点，我现在脑子嗡嗡的……喂，昨天说好不压榨人的，今天给不给放假啊？”",
+        "voice": "game_assets/voices/opening_day_01.mp3"
       }
     ]
   },
   "train_microwave": {
     "bg": "cafe1f",
     "cg": "microwave",
-    "loc": "1F · 水吧特调研发台",
-    "sub": "上午训练 · 琥珀 × 零音 师徒剧场",
+    "loc": "1F · 水吧台",
+    "sub": "上午备场 · 琥珀与零音",
     "lines": [
       {
         "speaker": "陈琥珀",
@@ -199,9 +185,8 @@ window.GAME_STORIES = {
           "reine:glasses"
         ],
         "speaking": 0,
-        "text": "“祖宗！！白石零音！你往冰沙机里倒的那勺白色粉末是粗海盐！还有，我让你拿出来回温的宇治抹茶砖呢？！”",
-        "voice": "game_assets/voices/train_microwave_00.mp3",
-        "spokenText": "祖宗！！白石零音！你往冰沙机里倒的那勺白色粉末是粗海盐！还有，我让你拿出来回温的宇治抹茶砖呢？！"
+        "text": "“停停停！白石零音你往冰沙机里舀的那勺是海盐！我让你拿出来化冻的抹茶砖呢？”",
+        "voice": "game_assets/voices/train_microwave_00.mp3"
       },
       {
         "speaker": "白石零音",
@@ -210,37 +195,33 @@ window.GAME_STORIES = {
           "reine:glasses"
         ],
         "speaking": 1,
-        "text": "（鼻梁上架着500度厚底黑框眼镜，指了指身后嗡嗡作响的微波炉）“自然回温太慢，不符合效率。我连着锡纸包装调了高火三分钟。”",
-        "voice": "game_assets/voices/train_microwave_01.mp3",
-        "spokenText": "自然回温太慢，不符合效率。我连着锡纸包装调了高火三分钟。"
+        "text": "零音推了下眼镜，指指身后正在转的微波炉。\n“放常温太慢。我直接连包装调了高火三分钟。”",
+        "voice": "game_assets/voices/train_microwave_01.mp3"
       },
       {
         "speaker": "旁白",
         "cg": "microwave",
-        "text": "啪——滋啦！微波炉爆出一团电火花与黑烟！陆沉一步跨过去拔掉插座，琥珀眼疾手快揪住零音后衣领把她拖出两米远。零音鼻尖蹭了两道黑灰，耳根红透却还在强装镇定推眼镜。",
-        "voice": "game_assets/voices/train_microwave_02.mp3",
-        "spokenText": "啪，滋啦！微波炉爆出一团电火花与黑烟！陆沉一步跨过去拔掉插座，琥珀眼疾手快揪住零音后衣领把她拖出两米远。零音鼻尖蹭了两道黑灰，耳根红透却还在强装镇定推眼镜。"
+        "text": "话音没落，微波炉里“啪”地爆出一串蓝火花，紧接着一股焦烟冒了出来。陆沉三步跨过去扯掉插头，琥珀顺手揪着零音衣领把人拉到一边。",
+        "voice": "game_assets/voices/train_microwave_02.mp3"
       },
       {
         "speaker": "白石零音",
         "cg": "microwave",
-        "text": "“……咳。我在测试金属高频涡流对抹茶多酚的焦化反应。这是第19号实验性黑暗料理，凡人不懂。”",
-        "voice": "game_assets/voices/train_microwave_03.mp3",
-        "spokenText": "……咳。我在测试金属高频涡流对抹茶多酚的焦化反应。这是第19号实验性黑暗料理，凡人不懂。"
+        "text": "零音鼻尖沾了点黑灰，耳根红了一片，嘴上还硬撑着：\n“……包装袋上没写不能进微波炉。算机器设计缺陷。”",
+        "voice": "game_assets/voices/train_microwave_03.mp3"
       },
       {
         "speaker": "陈琥珀",
         "cg": "microwave",
-        "text": "“噗哈哈哈还第19号实验呢！脸都成花猫了大小姐！别动，姐拿湿巾给你擦擦，我外婆说了，连热饭都不会的姑娘自己住出租屋是要饿出胃病的！”",
-        "voice": "game_assets/voices/train_microwave_04.mp3",
-        "spokenText": "噗哈哈哈还第19号实验呢！脸都成花猫了大小姐！别动，姐拿湿巾给你擦擦，我外婆说了，连热饭都不会的姑娘自己住出租屋是要饿出胃病的！"
+        "text": "“行行行，机器的错。别躲，纸巾拿来擦擦脸——以后热个便当都来找我，再自己折腾，房东还没赶人咱先得赔装修费。”",
+        "voice": "game_assets/voices/train_microwave_04.mp3"
       }
     ]
   },
   "train_breath": {
     "bg": "liveB1",
-    "loc": "B1 · 地下舞台排练室",
-    "sub": "上午训练 · 零音 × 真昼 唱跳特训",
+    "loc": "B1 · 排练室",
+    "sub": "上午备场 · 零音与真昼",
     "lines": [
       {
         "speaker": "白石零音",
@@ -249,9 +230,8 @@ window.GAME_STORIES = {
           "mahiru:normal"
         ],
         "speaking": 0,
-        "text": "（居高临下用鼓槌敲了敲瘫在地板上喘气的真昼鞋底）“第三小节换气又抢了半拍。林真昼，你平时在二楼算拍切提成的时候，心算不是快得像计算机吗？”",
-        "voice": "game_assets/voices/train_breath_00.mp3",
-        "spokenText": "第三小节换气又抢了半拍。林真昼，你平时在二楼算拍切提成的时候，心算不是快得像计算机吗？"
+        "text": "零音拿鼓槌轻轻敲了下真昼的鞋尖。\n“第三小节又抢半拍。你平时在楼上算提成挺准的，怎么一到节拍器前头就乱？”",
+        "voice": "game_assets/voices/train_breath_00.mp3"
       },
       {
         "speaker": "林真昼",
@@ -260,16 +240,15 @@ window.GAME_STORIES = {
           "mahiru:shy"
         ],
         "speaking": 1,
-        "text": "（一边大口喘气，一边掏出三色圆珠笔在歌谱空白处列了一排呼吸时间轴函数）“闭嘴！本销冠只是在计算肺活量最优解……把伴奏倒回去再来一遍，这次错半拍我跟你姓！”",
-        "voice": "game_assets/voices/train_breath_01.mp3",
-        "spokenText": "闭嘴！本销冠只是在计算肺活量最优解……把伴奏倒回去再来一遍，这次错半拍我跟你姓！"
+        "text": "真昼喘着气，从口袋摸出红蓝笔在谱子空白处飞快标了几个换气记号。\n“吵死了，我刚才在算哪两句能偷口气。把伴奏倒回去，再来一遍，再抢拍今天晚饭我请。”",
+        "voice": "game_assets/voices/train_breath_01.mp3"
       }
     ]
   },
   "train_cheki": {
     "bg": "cheki2f",
-    "loc": "2F · 拍立得特典角",
-    "sub": "上午训练 · 真昼 × 千禧 电子饭撒",
+    "loc": "2F · 拍立得角",
+    "sub": "上午备场 · 真昼与千禧",
     "lines": [
       {
         "speaker": "林真昼",
@@ -278,9 +257,8 @@ window.GAME_STORIES = {
           "millie:normal"
         ],
         "speaking": 0,
-        "text": "“笨死了小地鼠，谁让你直视客人眼睛了？实在害怕的时候，就把你那台改装掌机举起来挡住半张脸，只露出一双眼睛比个耶——这就叫赛博犹抱琵琶半遮面！”",
-        "voice": "game_assets/voices/train_cheki_00.mp3",
-        "spokenText": "笨死了小地鼠，谁让你直视客人眼睛了？实在害怕的时候，就把你那台改装掌机举起来挡住半张脸，只露出一双眼睛比个耶，这就叫赛博犹抱琵琶半遮面！"
+        "text": "“你盯着地板干嘛呀？不敢看客人脸就把你那台掌机举到鼻梁底下，只露双眼睛比个耶，拍出来还挺有范儿的。”",
+        "voice": "game_assets/voices/train_cheki_00.mp3"
       },
       {
         "speaker": "苏千禧",
@@ -289,16 +267,15 @@ window.GAME_STORIES = {
           "millie:happy"
         ],
         "speaking": 1,
-        "text": "（把掌机举到鼻尖前，露出一双弯弯的眼睛小声跟读）“……像这样吗？谢谢惠顾，多爆金币~”",
-        "voice": "game_assets/voices/train_cheki_01.mp3",
-        "spokenText": "……像这样吗？谢谢惠顾，多爆金币。"
+        "text": "千禧乖乖把掌机举高半寸，从屏幕后头探出眼睛小声试了一遍。\n“……这样行吗？谢谢光临，欢迎下次再来。”",
+        "voice": "game_assets/voices/train_cheki_01.mp3"
       }
     ]
   },
   "train_dress": {
     "bg": "cheki2f",
-    "loc": "2F · 后台更衣室",
-    "sub": "上午训练 · 琥珀 × 真昼 改衣日常",
+    "loc": "2F · 后台更衣间",
+    "sub": "上午备场 · 琥珀与真昼",
     "lines": [
       {
         "speaker": "陈琥珀",
@@ -307,9 +284,8 @@ window.GAME_STORIES = {
           "mahiru:shy"
         ],
         "speaking": 0,
-        "text": "“吸什么肚子，胃还要不要了？这礼拜天天喝陆店长给你热的草莓牛奶，长了二两肉气色才好看！转过去，姐给你把腰线暗褶往外放半寸，正面看照样细！”",
-        "voice": "game_assets/voices/train_dress_00.mp3",
-        "spokenText": "吸什么肚子，胃还要不要了？这礼拜天天喝陆店长给你热的草莓牛奶，长了二两肉气色才好看！转过去，姐给你把腰线暗褶往外放半寸，正面看照样细！"
+        "text": "“吸什么肚子，勒得胃不难受？这阵子总算按点吃饭了，脸上有点肉才顺眼。转过去，我把侧边暗褶放开半寸，外头根本看不出来。”",
+        "voice": "game_assets/voices/train_dress_00.mp3"
       },
       {
         "speaker": "林真昼",
@@ -318,16 +294,15 @@ window.GAME_STORIES = {
           "mahiru:shy"
         ],
         "speaking": 1,
-        "text": "“……那你不准告诉陆沉我腰围胖了半寸啊，不然我把你今天炖的排骨汤全喝光！”",
-        "voice": "game_assets/voices/train_dress_01.mp3",
-        "spokenText": "……那你不准告诉陆沉我腰围胖了半寸啊，不然我把你今天炖的排骨汤全喝光！"
+        "text": "“……不许跟陆沉说我腰围松了半寸啊。敢说漏嘴，你今天炖的排骨我一口不给你留。”",
+        "voice": "game_assets/voices/train_dress_01.mp3"
       }
     ]
   },
   "special_bday_morning": {
     "bg": "cafe1f",
-    "loc": "1F · 生诞祭秘密筹备现场",
-    "sub": "★ 真昼生诞祭限定 · 瞒着寿星吹黑粉气球",
+    "loc": "1F · 营业前大厅",
+    "sub": "10/24 · 偷偷布置生日角",
     "lines": [
       {
         "speaker": "陈琥珀",
@@ -336,9 +311,8 @@ window.GAME_STORIES = {
           "reine:glasses"
         ],
         "speaking": 0,
-        "text": "“快快快！店长已经把真昼支去街角买草莓了，零音你把那串黑粉骷髅气球挂高点，千禧快把生诞痛墙的灯带接上！”",
-        "voice": "game_assets/voices/special_bday_morning_00.mp3",
-        "spokenText": "快快快！店长已经把真昼支去街角买草莓了，零音你把那串黑粉骷髅气球挂高点，千禧快把生诞痛墙的灯带接上！"
+        "text": "“快点快点！店长刚把真昼支去路口买草莓，零音帮我把那串气球挂高点，千禧把灯带插上！”",
+        "voice": "game_assets/voices/special_bday_morning_00.mp3"
       },
       {
         "speaker": "林真昼",
@@ -347,16 +321,15 @@ window.GAME_STORIES = {
           "kohaku:normal"
         ],
         "speaking": 0,
-        "text": "（提前半小时拎着草莓推门进来撞个正着，愣在门口三秒后，耳根通红地砰一下把门重新关上）“……我什么都没看见！你们继续藏，我在门外数到一百再进来！”",
-        "voice": "game_assets/voices/special_bday_morning_01.mp3",
-        "spokenText": "……我什么都没看见！你们继续藏，我在门外数到一百再进来！"
+        "text": "玻璃门提前半小时被推开。拎着两盒草莓的真昼在门口愣了两秒，脸刷地红透，反手又把门轻轻带上了。\n“……我什么都没看见。你们继续弄，我在外头转一圈十分钟后再进！”",
+        "voice": "game_assets/voices/special_bday_morning_01.mp3"
       }
     ]
   },
   "af_omurice": {
     "bg": "cafe1f",
-    "loc": "1F · 水吧与点餐区",
-    "sub": "下午营业 · 招牌特调与手绘蛋包饭",
+    "loc": "1F · 吧台出餐口",
+    "sub": "下午营业 · 餐食与饮品",
     "lines": [
       {
         "speaker": "陈琥珀",
@@ -365,9 +338,8 @@ window.GAME_STORIES = {
           "mahiru:normal"
         ],
         "speaking": 0,
-        "text": "（颠勺的火光映亮了半个水吧，把金黄流心的蛋包饭端上出餐台）“三号桌的招牌流心蛋包饭好咧！真昼，过来给客人画个番茄酱图案！”",
-        "voice": "game_assets/voices/af_omurice_00.mp3",
-        "spokenText": "三号桌的招牌流心蛋包饭好咧！真昼，过来给客人画个番茄酱图案！"
+        "text": "琥珀利落地把刚出锅的蛋包饭滑进盘子，往出餐台上一推。\n“三号桌的流心蛋包饭好了！真昼，过来挤个番茄酱。”",
+        "voice": "game_assets/voices/af_omurice_00.mp3"
       },
       {
         "speaker": "林真昼",
@@ -376,16 +348,15 @@ window.GAME_STORIES = {
           "mahiru:normal"
         ],
         "speaking": 1,
-        "text": "（拿着番茄酱挤压瓶三秒钟画出一只歪嘴黑猫）“看什么看，歪嘴猫是本店隐藏限定款，多收你五块钱手工费都是便宜你了喵~”",
-        "voice": "game_assets/voices/af_omurice_01.mp3",
-        "spokenText": "看什么看，歪嘴猫是本店隐藏限定款，多收你五块钱手工费都是便宜你了喵。"
+        "text": "真昼拿挤酱瓶三下五除二画了只歪嘴猫，冲客人扬了下下巴。\n“别嫌歪，歪嘴猫是限量款，别人想点还没呢。”",
+        "voice": "game_assets/voices/af_omurice_01.mp3"
       }
     ]
   },
   "af_cheki_rush": {
     "bg": "cheki2f",
-    "loc": "2F · 拍立得特典角",
-    "sub": "下午营业 · 拍切冲量专场（高收益·涨精神压力）",
+    "loc": "2F · 拍立得角",
+    "sub": "下午营业 · 拍切高峰",
     "lines": [
       {
         "speaker": "林真昼",
@@ -394,16 +365,15 @@ window.GAME_STORIES = {
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "（趁下一位客人还没上楼的十秒空隙，飞快卸下甜笑揉了揉发酸的腮帮子，仰头喝了一口陆沉放在桌角的温水）“呼……今天拍切队排到一楼了，手腕都画酸了。店长，晚上打烊不请我喝热草莓奶我可要罢工了哦。”",
-        "voice": "game_assets/voices/af_cheki_rush_00.mp3",
-        "spokenText": "呼……今天拍切队排到一楼了，手腕都画酸了。店长，晚上打烊不请我喝热草莓奶我可要罢工了哦。"
+        "text": "趁下一位客人上楼的空档，真昼垮下肩膀揉了揉发酸的脸颊，端起桌边温水灌了一大口。\n“今天队伍排到楼梯拐角了，签字笔都写秃了一支……打烊不请我喝热草莓奶，明天真不干了。”",
+        "voice": "game_assets/voices/af_cheki_rush_00.mp3"
       }
     ]
   },
   "af_cp_cheki": {
     "bg": "cheki2f",
-    "loc": "2F · 拍立得特典角",
-    "sub": "下午营业 · 双人 CP 合拍特典",
+    "loc": "2F · 拍立得角",
+    "sub": "下午营业 · 双人合影",
     "lines": [
       {
         "speaker": "林真昼",
@@ -412,9 +382,8 @@ window.GAME_STORIES = {
           "reine:normal"
         ],
         "speaking": 0,
-        "text": "（趁拍立得相机读秒时故意往零音肩上靠，拿蕾丝蝴蝶结蹭零音的银灰长发）“茄子~零音姐你笑一下嘛，板着脸像讨债的！”",
-        "voice": "game_assets/voices/af_cp_cheki_00.mp3",
-        "spokenText": "茄子。零音姐你笑一下嘛，板着脸像讨债的！"
+        "text": "快门倒计时还剩两秒，真昼故意往零音肩上一靠。\n“笑一下嘛零音姐，你板着脸拍出来像来收保护费的。”",
+        "voice": "game_assets/voices/af_cp_cheki_00.mp3"
       },
       {
         "speaker": "白石零音",
@@ -423,27 +392,25 @@ window.GAME_STORIES = {
           "reine:normal"
         ],
         "speaking": 1,
-        "text": "（嘴角抽搐着伸出一根手指抵住真昼额头把她推开）“离我远点，你的草莓香水味熏得我找不到调了。”",
-        "voice": "game_assets/voices/af_cp_cheki_01.mp3",
-        "spokenText": "离我远点，你的草莓香水味熏得我找不到调了。"
+        "text": "零音面无表情地伸出一根手指，精准抵住真昼额头把人推开两寸。\n“靠太近了。草莓味熏得头疼。”",
+        "voice": "game_assets/voices/af_cp_cheki_01.mp3"
       }
     ]
   },
   "special_exam_shred": {
     "bg": "cafe1f",
-    "loc": "1F · 吧台门口「零分庇护所」",
-    "sub": "★ 热搜特企 · 撕碎模拟卷换半价草莓奶",
+    "loc": "1F · 吧台门口",
+    "sub": "10/15 · 模考出分日",
     "lines": [
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "sprites": [
           "luchen:normal",
           "mahiru:normal"
         ],
         "speaking": 0,
-        "text": "（搬出一台办公碎纸机放在吧台门口，挂上黑板牌）“今天全市高三一模出分。凡是凭考砸试卷进店的客人，当场放进碎纸机粉碎，特调一律半价，考零分免单。”",
-        "voice": "game_assets/voices/special_exam_shred_00.mp3",
-        "spokenText": "今天全市高三一模出分。凡是凭考砸试卷进店的客人，当场放进碎纸机粉碎，特调一律半价，考零分免单。"
+        "text": "陆沉从库房搬出一台二手碎纸机摆在门口，拿粉笔在小黑板上写了一行字：\n“今天一模出分。带考砸的卷子来碎掉，饮料半价；真考零分，今天我请客。”",
+        "voice": "game_assets/voices/special_exam_shred_00.mp3"
       },
       {
         "speaker": "林真昼",
@@ -452,16 +419,15 @@ window.GAME_STORIES = {
           "mahiru:shy"
         ],
         "speaking": 1,
-        "text": "（站在碎纸机旁手脚麻利地往每杯温牛奶里多加一勺草莓酱）“喂，那个穿校服的小鬼，才扣二十分就哭鼻子？姐姐当年可是直接交白卷出来的，快把卷子塞进去，喝完热奶不准哭了！”",
-        "voice": "game_assets/voices/special_exam_shred_01.mp3",
-        "spokenText": "喂，那个穿校服的小鬼，才扣二十分就哭鼻子？姐姐当年可是直接交白卷出来的，快把卷子塞进去，喝完热奶不准哭了！"
+        "text": "真昼守在碎纸机边上，往刚热好的牛奶里多舀了一勺草莓酱。\n“才扣二十分哭什么呀？我当年数学最后两道大题直接空着交的。快把卷子塞进去，喝完热奶回学校。”",
+        "voice": "game_assets/voices/special_exam_shred_01.mp3"
       }
     ]
   },
   "special_bday_afternoon": {
     "bg": "cheki2f",
-    "loc": "2F · 生诞祭特典拍切会",
-    "sub": "★ 真昼生诞祭限定 · 右手写下的工整感谢语",
+    "loc": "2F · 生日特别场",
+    "sub": "10/24 · 生诞拍立得",
     "lines": [
       {
         "speaker": "林真昼",
@@ -470,16 +436,15 @@ window.GAME_STORIES = {
           "kohaku:normal"
         ],
         "speaking": 0,
-        "text": "（戴着琥珀连夜缝的蕾丝生日小王冠，看着排到楼梯口的熟客，紧张得手心出汗，破天荒换回右手工工整整写下拍立得寄语）“……土死了，谁要你们排这么长队祝我生日快乐啊。拿好了，这张不准挂闲鱼卖！”",
-        "voice": "game_assets/voices/special_bday_afternoon_00.mp3",
-        "spokenText": "……土死了，谁要你们排这么长队祝我生日快乐啊。拿好了，这张不准挂闲鱼卖！"
+        "text": "看着楼梯口排得老长的熟客，真昼把琥珀连夜改好的蕾丝发箍扶正，难得老老实实用右手一笔一划在相纸背面写了句谢谢。\n“……烦死了，过个生日排这么长干嘛。拿好了，这张不许转手挂闲鱼啊。”",
+        "voice": "game_assets/voices/special_bday_afternoon_00.mp3"
       }
     ]
   },
   "ev_reine_solo": {
     "bg": "liveB1",
-    "loc": "B1 · 地下 Livehouse 舞台",
-    "sub": "晚上演出 · 王牌主唱 Solo 摇滚夜",
+    "loc": "B1 · 地下舞台",
+    "sub": "晚间演出 · 零音专场",
     "lines": [
       {
         "speaker": "白石零音",
@@ -488,31 +453,29 @@ window.GAME_STORIES = {
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "（地下室大灯骤然熄灭，一束冷白追光打在换上暗红美瞳的零音身上，她扫响第一个失真吉他和弦）“欢迎来到 404 地下室。今晚也是第 37 号营业谎言——不想耳朵怀孕的现在退场还来得及。”",
-        "voice": "game_assets/voices/ev_reine_solo_00.mp3",
-        "spokenText": "欢迎来到 404 地下室。今晚也是第 37 号营业谎言，不想耳朵怀孕的现在退场还来得及。"
+        "text": "地下室顶灯灭掉，一束白光落在台中央。零音拨开效果器，试了声失真吉他。\n“废话不多说，今晚八首歌连着唱。嫌吵的现在出门还来得及。”",
+        "voice": "game_assets/voices/ev_reine_solo_00.mp3"
       }
     ]
   },
   "ev_full_live": {
     "bg": "liveB1",
     "cg": "finaleLive",
-    "loc": "B1 · 地下 Livehouse 舞台",
-    "sub": "晚上演出 · 全员燃曲炸场 Live（宣泄精神压力！）",
+    "loc": "B1 · 地下舞台",
+    "sub": "晚间演出 · 全员乐队场",
     "lines": [
       {
         "speaker": "陈琥珀",
         "cg": "finaleLive",
-        "text": "“千禧把8-bit电子鼓点推到最大！真昼、零音，把白天受的闷气全给我吼进麦克风里！台下的朋友们，荧光棒给我挥起来！！”",
-        "voice": "game_assets/voices/ev_full_live_00.mp3",
-        "spokenText": "千禧把8-bit电子鼓点推到最大！真昼、零音，把白天受的闷气全给我吼进麦克风里！台下的朋友们，荧光棒给我挥起来！！"
+        "text": "“千禧，鼓点推上来！真昼、零音，白天憋了一肚子气全冲着话筒喊出来——后排站着的别干愣着，一起噪起来！”",
+        "voice": "game_assets/voices/ev_full_live_00.mp3"
       }
     ]
   },
   "ev_unplugged": {
     "bg": "liveB1",
-    "loc": "B1 · 地下 Livehouse 舞台",
-    "sub": "晚上演出 · 走心 Unplugged 不插电夜",
+    "loc": "B1 · 地下舞台",
+    "sub": "晚间演出 · 不插电专场",
     "lines": [
       {
         "speaker": "白石零音",
@@ -521,17 +484,16 @@ window.GAME_STORIES = {
           "mahiru:normal"
         ],
         "speaking": 0,
-        "text": "（四个人坐在铺着旧波斯地毯的舞台边缘，零音抱着木吉他轻轻拨弦）“今晚不开失真效果器了。陆沉，把吧台的肉桂红茶热上，这首慢歌……唱给今晚还没回家的人听。”",
-        "voice": "game_assets/voices/ev_unplugged_00.mp3",
-        "spokenText": "今晚不开失真效果器了。陆沉，把吧台的肉桂红茶热上，这首慢歌……唱给今晚还没回家的人听。"
+        "text": "四个人搬了高脚凳坐在台边，零音换了把木吉他，轻轻拨了个分解和弦。\n“今晚不开失真。陆沉，把热红茶端过来。这首慢歌……给今天下班晚的人。”",
+        "voice": "game_assets/voices/ev_unplugged_00.mp3"
       }
     ]
   },
   "special_halloween_live": {
     "bg": "liveB1",
     "cg": "finaleLive",
-    "loc": "B1 · 万圣节百鬼夜行假面专场",
-    "sub": "★ 万圣节限定 Live · 病娇小恶魔与赛博幽灵",
+    "loc": "B1 · 万圣节特别场",
+    "sub": "10/31 · 变装演出夜",
     "lines": [
       {
         "speaker": "苏千禧",
@@ -540,17 +502,16 @@ window.GAME_STORIES = {
           "mahiru:normal"
         ],
         "speaking": 0,
-        "text": "（套着带墨镜的幽灵床单在台边第一次主动伸手给客人发糖果）“不、不给打赏就顺着网线黑进你手机……万圣节快乐！”",
-        "voice": "game_assets/voices/special_halloween_live_00.mp3",
-        "spokenText": "不、不给打赏就顺着网线黑进你手机……万圣节快乐！"
+        "text": "千禧顶着一块剪了两个眼洞的旧白床单，难得走出吧台给前排观众递糖。\n“……不拿糖的话，我回去给你电脑弹弹窗。万圣节快乐。”",
+        "voice": "game_assets/voices/special_halloween_live_00.mp3"
       }
     ]
   },
   "act1_climax_duet": {
     "bg": "liveB1",
     "cg": "duetZero",
-    "loc": "B1 · 地下 Livehouse 舞台",
-    "sub": "★ 第一幕高潮 · 被谱成摇滚曲的《零分次品》",
+    "loc": "B1 · 地下舞台",
+    "sub": "10/15 · 《零分次品》首演",
     "lines": [
       {
         "speaker": "林真昼",
@@ -559,37 +520,33 @@ window.GAME_STORIES = {
           "reine:normal"
         ],
         "speaking": 0,
-        "text": "“白石零音！把手机还我！谁准你偷看我昨天落下的翻盖机备忘录的？！看我一模考砸的笑话很爽是吧？！”",
-        "voice": "game_assets/voices/act1_climax_duet_00.mp3",
-        "spokenText": "白石零音！把手机还我！谁准你偷看我昨天落下的翻盖机备忘录的？！看我一模考砸的笑话很爽是吧？！"
+        "text": "“白石零音你把手机还我！谁让你乱翻我备忘录的？！笑我以前考砸很好玩吗！”",
+        "voice": "game_assets/voices/act1_climax_duet_00.mp3"
       },
       {
         "speaker": "白石零音",
         "cg": "duetZero",
-        "text": "“考卷上的红叉像溺水的雨，少拿一分就要被扔进垃圾桶里；对着镜头笑到苹果肌抽筋，谁来告诉我，零分的次品该往哪里逃命？”",
-        "voice": "game_assets/voices/act1_climax_duet_01.mp3",
-        "spokenText": "考卷上的红叉像溺水的雨，少拿一分就要被扔进垃圾桶里；对着镜头笑到苹果肌抽筋，谁来告诉我，零分的次品该往哪里逃命？"
+        "text": "零音没理她，直接扫响前奏，对着麦把备忘录里那几行字吼了出来：\n“红笔划掉的那一页，少拿一分就不配站在这里；对着镜头笑到脸发僵，零分的次品，今晚不用讨谁欢喜。”",
+        "voice": "game_assets/voices/act1_climax_duet_01.mp3"
       },
       {
         "speaker": "白石零音",
         "cg": "duetZero",
-        "text": "“我讨厌说假话的人，林真昼——但你半夜两点躲在被子里写的这几句，是真话。这首《零分次品》词作者署名归你，以后我的歌，词全归你写了。”",
-        "voice": "game_assets/voices/act1_climax_duet_02.mp3",
-        "spokenText": "我讨厌说假话的人，林真昼，但你半夜两点躲在被子里写的这几句，是真话。这首《零分次品》词作者署名归你，以后我的歌，词全归你写了。"
+        "text": "曲终，音箱还留着余震。零音把一张手抄谱塞进真昼怀里。\n“你平时在台上净说漂亮假话，但这几句是真的。这首歌作词写你名字，以后新歌的词，你来填。”",
+        "voice": "game_assets/voices/act1_climax_duet_02.mp3"
       },
       {
         "speaker": "林真昼",
         "cg": "duetZero",
-        "text": "（死死把五线谱抱在胸口，眼眶通红却把下巴抬得老高）“……谁答应跟你五五开了！词是我写的，我要拿五成半！第二段副歌明天上午十点我重填！”",
-        "voice": "game_assets/voices/act1_climax_duet_03.mp3",
-        "spokenText": "……谁答应跟你五五开了！词是我写的，我要拿五成半！第二段副歌明天上午十点我重填！"
+        "text": "真昼把谱子攥得发皱，眼睛红了一圈，嘴上却不饶人：\n“……版权费得按五五算！不，我出词我拿五成半。第二段副歌太糙了，明早十点我重改。”",
+        "voice": "game_assets/voices/act1_climax_duet_03.mp3"
       }
     ]
   },
   "night_red_interaction": {
     "bg": "cafe1f",
-    "loc": "22:00 · 官号小红书种草宣发",
-    "sub": "下班社媒运营 · 明日午市客流 +35%",
+    "loc": "22:00 · 吧台整理",
+    "sub": "打烊后 · 图文宣发",
     "lines": [
       {
         "speaker": "苏千禧",
@@ -598,16 +555,15 @@ window.GAME_STORIES = {
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "“九宫格穿搭与特调种草笔记已经发出去啦，半小时点赞破千！店长，真昼刚刚在自己的小红书小号也发了动态，快看右侧手机面板回应她吧~”",
-        "voice": "game_assets/voices/night_red_interaction_00.mp3",
-        "spokenText": "九宫格穿搭与特调种草笔记已经发出去啦，半小时点赞破千！店长，真昼刚刚在自己的小红书小号也发了动态，快看右侧手机面板回应她吧。"
+        "text": "“今天的特调图和穿搭笔记发完了，评论区好几个问地址的。对了店长，真昼刚在小号发了条动态，手机切过去看一眼吧。”",
+        "voice": "game_assets/voices/night_red_interaction_00.mp3"
       }
     ]
   },
   "night_wx_group": {
     "bg": "cafe1f",
-    "loc": "22:00 · 8-bit 故障风舞台切片宣发",
-    "sub": "下班社媒运营 · 明日晚场票房 +45%",
+    "loc": "22:00 · 吧台剪辑",
+    "sub": "打烊后 · 演出切片",
     "lines": [
       {
         "speaker": "苏千禧",
@@ -616,103 +572,92 @@ window.GAME_STORIES = {
           "reine:glasses"
         ],
         "speaking": 0,
-        "text": "“今晚的 B1 舞台高燃切片剪好发上 B 站了，同城热搜预订！我已经切到右侧手机界面了，快回一下大家的微信消息就可以关灯睡觉啦。”",
-        "voice": "game_assets/voices/night_wx_group_00.mp3",
-        "spokenText": "今晚的 B1 舞台高燃切片剪好发上 B 站了，同城热搜预订！我已经切到右侧手机界面了，快回一下大家的微信消息就可以关灯睡觉啦。"
+        "text": "“今晚 B1 的副歌片段剪好传上去了，同城推荐已经起量了。手机那边还有几条未读消息，看完早点关灯回吧。”",
+        "voice": "game_assets/voices/night_wx_group_00.mp3"
       }
     ]
   },
   "stay_mahiru_rain": {
     "bg": "cafe1f",
     "cg": "mahiruRain",
-    "loc": "1F · 21:40 打烊后的深夜吧台",
-    "sub": "★ 留店深度剧情 · 烟盒背面的 98 分与温草莓奶",
+    "loc": "1F · 21:40 打烊后",
+    "sub": "雨夜 · 吧台边",
     "lines": [
       {
         "speaker": "旁白",
         "cg": "mahiruRain",
-        "text": "卷帘门拉下一半，外面下着梅雨。陆沉从B1检查完电闸上来时，发现真昼还没走。她踢掉了那双十厘米的厚底玛丽珍鞋，光着脚踩在吧台凳横档上，正慌张地擦拭一张被奶昔染成粉红色的盘点表。",
-        "voice": "game_assets/voices/stay_mahiru_rain_00.mp3",
-        "spokenText": "卷帘门拉下一半，外面下着梅雨。陆沉从B1检查完电闸上来时，发现真昼还没走。她踢掉了那双十厘米的厚底玛丽珍鞋，光着脚踩在吧台凳横档上，正慌张地擦拭一张被奶昔染成粉红色的盘点表。"
+        "text": "卷帘门拉下半截，外头下着细雨。陆沉从地下室断完电闸上来，见真昼还没走。她甩掉了高跟玛丽珍鞋，光脚踩在凳子横梁上，正拿纸巾手忙脚乱地擦一张被奶昔洇湿的盘点单。",
+        "voice": "game_assets/voices/stay_mahiru_rain_00.mp3"
       },
       {
         "speaker": "林真昼",
         "cg": "mahiruRain",
-        "text": "“哎呀被抓包了~手滑把半杯奶昔扣账本上了，今天三十二单拍切流水全糊了哦。店长现在发火还来得及——要扣光我底薪，还是让我明天不用来了？”",
-        "voice": "game_assets/voices/stay_mahiru_rain_01.mp3",
-        "spokenText": "哎呀被抓包了。手滑把半杯奶昔扣账本上了，今天三十二单拍切流水全糊了哦。店长现在发火还来得及，要扣光我底薪，还是让我明天不用来了？"
+        "text": "“行吧，抓个现行。手滑把半杯奶昔打翻在账本上了，今天三十二单流水全糊了。要扣工资还是让我明天不用来了，直说就行。”",
+        "voice": "game_assets/voices/stay_mahiru_rain_01.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "cg": "mahiruRain",
-        "text": "（没有接她带刺的话，只是把一杯恒温55度的热草莓牛奶推到她手边）“三十二单拍切，零钱抽屉多出三十五块客人没要的找零——你七点半交班前，不是早就用铅笔把总数心算好写在烟盒背面了吗？”",
-        "voice": "game_assets/voices/stay_mahiru_rain_02.mp3",
-        "spokenText": "三十二单拍切，零钱抽屉多出三十五块客人没要的找零，你七点半交班前，不是早就用铅笔把总数心算好写在烟盒背面了吗？"
+        "text": "陆沉没接话，把刚热好的一杯草莓牛奶推到她手边。\n“三十二单拍切，抽屉里多出三十五块零头——你七点半交班前，不是早就拿铅笔把总数记在烟盒背面了？”",
+        "voice": "game_assets/voices/stay_mahiru_rain_02.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "cg": "mahiruRain",
-        "text": "“心算比收银机还快的人，不用假装自己不会记账。404 的及格线是 0 分，把热牛奶喝了，胃不疼了就穿鞋回家。”",
-        "voice": "game_assets/voices/stay_mahiru_rain_03.mp3",
-        "spokenText": "心算比收银机还快的人，不用假装自己不会记账。404 的及格线是 0 分，把热牛奶喝了，胃不疼了就穿鞋回家。"
+        "text": "“算得比收银机还快，用不着拿弄脏纸张来试探我。牛奶趁热喝完，外头雨小了就回家。”",
+        "voice": "game_assets/voices/stay_mahiru_rain_03.mp3"
       },
       {
         "speaker": "林真昼",
         "cg": "mahiruRain",
-        "text": "（盯着那杯冒热气的草莓牛奶好半天没动，声音低了八度）“……多管闲事。谁胃疼了，我只是嫌这破鞋磨脚。”",
-        "voice": "game_assets/voices/stay_mahiru_rain_04.mp3",
-        "spokenText": "……多管闲事。谁胃疼了，我只是嫌这破鞋磨脚。"
+        "text": "真昼盯着杯口冒出的热气看了半天，声音小下来。\n“……管得真宽。我又没胃疼，就是这双破鞋磨脚。”",
+        "voice": "game_assets/voices/stay_mahiru_rain_04.mp3"
       }
     ]
   },
   "stay_mahiru_bday": {
     "bg": "cafe1f",
     "cg": "birthdayCake",
-    "loc": "1F · 10月24日 22:30 熄灯后的吧台",
-    "sub": "★ 真昼生诞祭 · 打烊后的「第二个小蛋糕」",
+    "loc": "1F · 10月24日 22:30",
+    "sub": "打烊后的第二个蛋糕",
     "lines": [
       {
         "speaker": "旁白",
         "cg": "birthdayCake",
-        "text": "庆功宴的大蛋糕被琥珀和零音分完了。等大家走后，陆沉在熄了灯的吧台从冷藏柜最底层端出一个只有巴掌大、去掉了所有腻人奶油、只铺满新鲜红颜草莓的玻璃方盒，旁边放着一枚挂粉色猫咪牌的店门备用钥匙。",
-        "voice": "game_assets/voices/stay_mahiru_bday_00.mp3",
-        "spokenText": "庆功宴的大蛋糕被琥珀和零音分完了。等大家走后，陆沉在熄了灯的吧台从冷藏柜最底层端出一个只有巴掌大、去掉了所有腻人奶油、只铺满新鲜红颜草莓的玻璃方盒，旁边放着一枚挂粉色猫咪牌的店门备用钥匙。"
+        "text": "热闹散场，大蛋糕早被琥珀和零音分干净了。灯关掉大半，陆沉从冷藏柜底层端出一个巴掌大的玻璃盒——刮掉了厚奶油，只铺了切好的新鲜草莓，旁边压着一把挂着粉色猫牌的备用钥匙。",
+        "voice": "game_assets/voices/stay_mahiru_bday_00.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "cg": "birthdayCake",
-        "text": "“刚才看你嫌大蛋糕奶油腻，全刮到零音盘子里了。以后下雨天要是来得早，不用在后巷屋檐下蹲着等我开门，自己拿备用钥匙进来，热奶机一直开着。”",
-        "voice": "game_assets/voices/stay_mahiru_bday_01.mp3",
-        "spokenText": "刚才看你嫌大蛋糕奶油腻，全刮到零音盘子里了。以后下雨天要是来得早，不用在后巷屋檐下蹲着等我开门，自己拿备用钥匙进来，热奶机一直开着。"
+        "text": "“刚才见你嫌奶油腻，全挑给零音了。钥匙收着，以后下雨来早了，不用蹲巷口屋檐下等我开门，热奶机一直插着电。”",
+        "voice": "game_assets/voices/stay_mahiru_bday_01.mp3"
       },
       {
         "speaker": "林真昼",
         "cg": "birthdayCake",
-        "text": "（烛光映在她亮晶晶的琥珀色瞳孔里，她一把抓过那枚钥匙塞进贴身口袋，趴在吧台上小声说）“……小气鬼陆沉，连个包装盒都没有。钥匙是你求我收下的，明年十月二十四号，这间店也还要在啊。”",
-        "voice": "game_assets/voices/stay_mahiru_bday_02.mp3",
-        "spokenText": "……小气鬼陆沉，连个包装盒都没有。钥匙是你求我收下的，明年十月二十四号，这间店也还要在啊。"
+        "text": "真昼一把把钥匙攥进衣兜里，趴在吧台上小声嘟囔。\n“连个礼盒都舍不得买，真抠。……钥匙是你非要塞给我的啊，明年十月二十四号，这店可得还在。”",
+        "voice": "game_assets/voices/stay_mahiru_bday_02.mp3"
       }
     ]
   },
   "typhoon_kohaku": {
     "bg": "liveB1",
     "cg": "typhoonKohaku",
-    "loc": "B1 · 台风夜倒灌的后勤配电间",
-    "sub": "★ 第二幕大高潮 · 39.5度高烧的大姐头与店长底牌",
+    "loc": "B1 · 积水的配电间",
+    "sub": "11/09 · 台风夜",
     "lines": [
       {
         "speaker": "陈琥珀",
         "cg": "typhoonKohaku",
-        "text": "（高烧39.5度跪在积水里死死攥着缝衣针，看到陆沉下来慌张地把脸往阴影里藏）“店长你别开灯……眼线全花了丑死了。别告诉真昼她们我外婆进急诊的事，我歇五分钟就能把演出服缝好……我要是塌了，这帮小哭包怎么办啊……”",
-        "voice": "game_assets/voices/typhoon_kohaku_00.mp3",
-        "spokenText": "店长你别开灯……眼线全花了丑死了。别告诉真昼她们我外婆进急诊的事，我歇五分钟就能把演出服缝好……我要是塌了，这帮小哭包怎么办啊……"
+        "text": "暴雨倒灌进地下室，琥珀烧到三十九度五，还蹲在干木箱上赶缝明天要穿的演出服。见陆沉下来，她慌忙把脸侧进阴影里。\n“别开大灯，妆全花了难看死了……我外婆进急诊的事别跟真昼她们提。歇五分钟我就缝完，我一倒下，她们几个连晚饭都对付不了。”",
+        "voice": "game_assets/voices/typhoon_kohaku_00.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "cg": "typhoonKohaku",
-        "text": "（直接啪地拉下总电闸，半蹲在她面前把滚烫的她背上后背）“在 404，还轮不到一个二十岁的小姑娘拿命替老板扛事。外婆的住院押金我已经交了。陈琥珀，你今晚唯一的排班，就是趴在我背上去医院睡觉。”",
-        "voice": "game_assets/voices/typhoon_kohaku_01.mp3",
-        "spokenText": "在 404，还轮不到一个二十岁的小姑娘拿命替老板扛事。外婆的住院押金我已经交了。陈琥珀，你今晚唯一的排班，就是趴在我背上去医院睡觉。"
+        "text": "陆沉反手拉下总闸，把她手里的针线放回铁盒，蹲到她身前。\n“二十岁的小姑娘，用不着替老板撑天。市三院的住院押金我已经垫了，今晚你什么都别管，上来，我背你去医院挂水。”",
+        "voice": "game_assets/voices/typhoon_kohaku_01.mp3"
       },
       {
         "speaker": "苏千禧",
@@ -721,53 +666,48 @@ window.GAME_STORIES = {
           "mahiru:shy"
         ],
         "speaking": 0,
-        "text": "“真昼姐、零音姐……你们看店长公文包里掉出来的这几张纸。大厂P8裸辞单、重度失眠诊断书，还有押上全部身家的对赌协议……原来店长是在拿这90天，当自己人生的最后一场烟花。”",
-        "voice": "game_assets/voices/typhoon_kohaku_02.mp3",
-        "spokenText": "真昼姐、零音姐……你们看店长公文包里掉出来的这几张纸。大厂P8裸辞单、重度失眠诊断书，还有押上全部身家的对赌协议……原来店长是在拿这90天，当自己人生的最后一场烟花。"
+        "text": "楼上，收拾湿公文包的千禧把几张被雨水浸软的纸铺在桌上。\n“……真昼姐、零音姐，你们看这个。离职证明、重度失眠诊断单，还有押了全部存款的对赌合同……店长其实也跟我们一样，是无处可去才盘下这里的。”",
+        "voice": "game_assets/voices/typhoon_kohaku_02.mp3"
       }
     ]
   },
   "break_badge": {
     "bg": "cafe1f",
     "cg": "breakBadge",
-    "loc": "1F · 暴雨夜的审判与护短",
-    "sub": "★ 第三幕大高潮 · 当众折断的大厂P8烫金工牌",
+    "loc": "1F · 雨夜大厅",
+    "sub": "11/21 · 折断的工牌",
     "lines": [
       {
         "speaker": "旁白",
         "cg": "breakBadge",
-        "text": "真昼的教导主任母亲闯进店里，当众拽着真昼羞辱她“一模考砸就自甘堕落，穿成这副鬼样子怎么进大厂当体面人”。真昼脸色惨白浑身发抖，陆沉温和地走上前把真昼挡在身后，掏出自己那张烫金的大厂P8首席架构师工牌。",
-        "voice": "game_assets/voices/break_badge_00.mp3",
-        "spokenText": "真昼的教导主任母亲闯进店里，当众拽着真昼羞辱她“一模考砸就自甘堕落，穿成这副鬼样子怎么进大厂当体面人”。真昼脸色惨白浑身发抖，陆沉温和地走上前把真昼挡在身后，掏出自己那张烫金的大厂P8首席架构师工牌。"
+        "text": "晚上八点，真昼的母亲直接闯进店里，拽着她的手腕往外拉，嗓门盖过了音响——“考砸一次就自暴自弃，穿成这样鬼混，以后拿什么进大厂过体面日子？”真昼嘴唇发白，站在原地一动不动。陆沉走过去把人拦在身后，从抽屉里翻出一张印着大厂 logo 的旧工牌。",
+        "voice": "game_assets/voices/break_badge_00.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "cg": "breakBadge",
-        "text": "（当着真昼母亲的面，双手捏住那张无数家长奉若神明的烫金工牌，咔嚓一声脆响将其折成两半扔进垃圾桶，微笑着推了推眼镜）“林老师，您逼真昼拿命去考的那个终点，我上个月刚当垃圾扔了。那里凌晨三点有人在消防通道吐血，一点意思都没有。”",
-        "voice": "game_assets/voices/break_badge_01.mp3",
-        "spokenText": "林老师，您逼真昼拿命去考的那个终点，我上个月刚当垃圾扔了。那里凌晨三点有人在消防通道吐血，一点意思都没有。"
+        "text": "他没提高嗓门，只是双手把那张工牌折成两半，丢进了脚边的垃圾桶。\n“林老师，您想让她拼命挤进去的地方，我上个月刚走出来。那儿凌晨三点有人在消防通道吐血，真没什么体面的。”",
+        "voice": "game_assets/voices/break_badge_01.mp3"
       },
       {
         "speaker": "林真昼",
         "cg": "mahiruRain",
-        "text": "（卷帘门拉下后，真昼蹲在地上抓着你的袖口哭着问）“……如果我一辈子都只是个考砸的次品、连笑都笑不出来了，你也会把我扔出去吗？”",
-        "voice": "game_assets/voices/break_badge_02.mp3",
-        "spokenText": "……如果我一辈子都只是个考砸的次品、连笑都笑不出来了，你也会把我扔出去吗？"
+        "text": "卷帘门拉下来后，屋里只剩雨声。真昼蹲在吧台边，抓着陆沉袖口小声问：\n“……要是我以后一直这么没出息，连强装笑脸都撑不住了，你也会嫌麻烦把我赶走吗？”",
+        "voice": "game_assets/voices/break_badge_02.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "cg": "mahiruRain",
-        "text": "（蹲下身轻轻替她解下左锁骨上那枚扎了她两年的生锈安全别针）“在我这儿不用考一百分。考零分，你的工位也永远留着。”",
-        "voice": "game_assets/voices/break_badge_03.mp3",
-        "spokenText": "在我这儿不用考一百分。考零分，你的工位也永远留着。"
+        "text": "陆沉蹲下来，替她把领口那枚快散开的别针扣好。\n“不用讨好谁。店在一天，你随时可以回来待着。”",
+        "voice": "game_assets/voices/break_badge_03.mp3"
       }
     ]
   },
   "reine_rebel": {
     "bg": "liveB1",
     "cg": "duetZero",
-    "loc": "B1 · 第四幕决战：五个疯子的双向救赎",
-    "sub": "★ 反救店长 & 全网直播撕碎甜美团服",
+    "loc": "B1 · 决战前夜",
+    "sub": "12/20 · 谁也不许先退场",
     "lines": [
       {
         "speaker": "林真昼",
@@ -776,9 +716,8 @@ window.GAME_STORIES = {
           "kohaku:normal"
         ],
         "speaking": 0,
-        "text": "（第10周深夜，发现陆沉签好个人破产顶罪书准备独自扛雷消失，四个姑娘用撬棍撬开卷帘门把他死死堵在吧台，真昼抢过顶罪书撕得粉碎甩在他脸上）“大骗子！！你说过404不准交白卷当逃兵，结果你自己想跑路？！我不签字，你哪儿也别想去！”",
-        "voice": "game_assets/voices/reine_rebel_00.mp3",
-        "spokenText": "大骗子！！你说过404不准交白卷当逃兵，结果你自己想跑路？！我不签字，你哪儿也别想去！"
+        "text": "深夜十一点，陆沉刚把独担违约金的变更协议装进信封，卷帘门就被从外头撬开了。真昼冲进来一把抢过协议撕成两半。\n“骗子！不是说好九十天一起扛吗，自己偷偷写免责书算什么？我不认，你哪儿也别想去！”",
+        "voice": "game_assets/voices/reine_rebel_00.mp3"
       },
       {
         "speaker": "白石零音",
@@ -787,48 +726,44 @@ window.GAME_STORIES = {
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "（指着B1第一排被琥珀用电焊焊死在地板上的旧铁椅）“看清楚了大厂逃兵，那把椅子焊死了。明晚八点全网直播，你就给我坐在这儿看我怎么掀翻白昼娱乐的桌！”",
-        "voice": "game_assets/voices/reine_rebel_01.mp3",
-        "spokenText": "看清楚了大厂逃兵，那把椅子焊死了。明晚八点全网直播，你就给我坐在这儿看我怎么掀翻白昼娱乐的桌！"
+        "text": "零音指了指台下第一排那把旧铁椅——琥珀下午拿钢丝把它牢牢绑在了栏杆上。\n“明晚八点全网直播。你就坐那儿看着，看我们怎么凭真本事把场子赢回来。”",
+        "voice": "game_assets/voices/reine_rebel_01.mp3"
       },
       {
         "speaker": "白石零音",
         "cg": "duetZero",
-        "text": "（次日晚直播开启，陆沉直接跨进控台推掉全部假唱垫音，用鼓槌敲响原曲真正的四四拍！零音眼底燃起疯火，当众一把扯碎粉色甜美罩衫露出黑银荆棘战袍）“第 37 号营业谎言到此为止了——这首歌，叫《裂缝里的安可曲》！”",
-        "voice": "game_assets/voices/reine_rebel_02.mp3",
-        "spokenText": "第 37 号营业谎言到此为止了，这首歌，叫《裂缝里的安可曲》！"
+        "text": "次日晚直播开启，主办方强塞进来的甜美伴奏刚响两秒，控台里的陆沉直接拉掉垫音，把实录麦推到最大。零音扯掉身上那件粉色蕾丝罩衫，抓紧立麦：\n“对嘴假唱的戏到此为止——这首原创，叫《裂缝里的安可》。”",
+        "voice": "game_assets/voices/reine_rebel_02.mp3"
       }
     ]
   },
   "new_year_finale": {
     "bg": "rooftop3f",
     "cg": "finaleLive",
-    "loc": "B1 跨年千人安可祭 → 3F 飘雪露台",
-    "sub": "★ 第五幕终局 · 裂缝里的安可曲",
+    "loc": "B1 地下舞台 → 3F 露台",
+    "sub": "12/31 · 跨年夜",
     "lines": [
       {
         "speaker": "旁白",
         "cg": "finaleLive",
-        "text": "12月31日跨年夜，B1地下舞台被上千名挥舞荧光棒的年轻同好挤得水泄不通！千禧戴着发光猫耳面具在DJ台控场，琥珀掌管战袍与特调，真昼与零音并肩唱响《裂缝里的安可曲》，90天保卫战大获全胜！",
-        "voice": "game_assets/voices/new_year_finale_00.mp3",
-        "spokenText": "12月31日跨年夜，B1地下舞台被上千名挥舞荧光棒的年轻同好挤得水泄不通！千禧戴着发光猫耳面具在DJ台控场，琥珀掌管战袍与特调，真昼与零音并肩唱响《裂缝里的安可曲》，90天保卫战大获全胜！"
+        "text": "12月31日晚，B1 地下室破天荒挤满了上千号人。千禧在控台稳稳接住每一段灯光与音效，琥珀守着后勤和饮品，真昼和零音在台前唱完了最后一首安可曲。九十天到期，404 留下来了。",
+        "voice": "game_assets/voices/new_year_finale_00.mp3"
       },
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "bg": "rooftop3f",
         "sprites": [
           "luchen:normal"
         ],
-        "text": "“23点55分，庆功火锅局散去，零点的跨年烟花马上就要升空了……手机震了，去三楼露台看看是谁吧。”",
-        "voice": "game_assets/voices/new_year_finale_01.mp3",
-        "spokenText": "23点55分，庆功火锅局散去，零点的跨年烟花马上就要升空了……手机震了，去三楼露台看看是谁吧。"
+        "text": "23点55分，庆功的火锅局刚散，手机在兜里震了一下。离零点还有五分钟，上去三楼露台吹吹风吧。",
+        "voice": "game_assets/voices/new_year_finale_01.mp3"
       }
     ]
   },
   "true_end_mahiru": {
     "bg": "rooftop3f",
-    "loc": "3F · 跨年飘雪露台 · 零点烟花",
-    "sub": "🌸 林真昼 True End ·《终身免检的备用钥匙》",
+    "loc": "3F · 跨年露台",
+    "sub": "林真昼结局 ·《99 分与备用钥匙》",
     "lines": [
       {
         "speaker": "林真昼",
@@ -837,9 +772,8 @@ window.GAME_STORIES = {
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "（真昼裹着黑粉围巾，把冻凉的右手自然塞进你风衣口袋里，摸到那串备用钥匙与热草莓奶）“喂，陆沉。刚才楼下结年底总账的时候，我故意少算了五块钱哦。这样今年就只有99分，永远差一分才满分。”",
-        "voice": "game_assets/voices/true_end_mahiru_00.mp3",
-        "spokenText": "喂，陆沉。刚才楼下结年底总账的时候，我故意少算了五块钱哦。这样今年就只有99分，永远差一分才满分。"
+        "text": "风有点凉，真昼裹着围巾，把手顺理成章塞进你风衣口袋暖着，指尖碰到了那把挂猫牌的备用钥匙。\n“喂，陆沉。刚才结年底总账的时候，我故意少算了五块钱，这样今年就只有 99 分——挺好的，不用拿满分。”",
+        "voice": "game_assets/voices/true_end_mahiru_00.mp3"
       },
       {
         "speaker": "林真昼",
@@ -848,16 +782,15 @@ window.GAME_STORIES = {
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "“我先说好哦——就算赢了对赌，我明年还是会赖床迟到，胃疼的时候脾气还是超级差。这么麻烦的零分次品，五、四、三、二、一……晚啦！零点超时了，终身不退不换了，笨蛋店长！”",
-        "voice": "game_assets/voices/true_end_mahiru_01.mp3",
-        "spokenText": "我先说好哦，就算赢了对赌，我明年还是会赖床迟到，胃疼的时候脾气还是超级差。这么麻烦的零分次品，五、四、三、二、一……晚啦！零点超时了，终身不退不换了，笨蛋店长！"
+        "text": "远处第一朵烟花炸开。她仰起脸，耳尖冻得发红：\n“提前说清楚，明年我还是会赖床，心情不好还是爱挑刺。五、四、三、二、一……过零点了，反悔来不及啦，新年快乐。”",
+        "voice": "game_assets/voices/true_end_mahiru_01.mp3"
       }
     ]
   },
   "true_end_reine": {
     "bg": "rooftop3f",
-    "loc": "3F · 跨年飘雪露台 · 零点烟花",
-    "sub": "🎸 白石零音 True End ·《第 0 号真话》",
+    "loc": "3F · 跨年露台",
+    "sub": "白石零音结局 ·《不加混响》",
     "lines": [
       {
         "speaker": "白石零音",
@@ -866,16 +799,15 @@ window.GAME_STORIES = {
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "（零音摘掉红美瞳换上500度黑框眼镜，把半边有线耳机塞进你右耳里，里面是木吉他清唱的《致陆沉》）“前三十七句‘最喜欢店长了’都是我在台上骗人的。今天这句是第0号——没加混响、没写进剧本，听不清算你活该！”",
-        "voice": "game_assets/voices/true_end_reine_00.mp3",
-        "spokenText": "前三十七句‘最喜欢店长了’都是我在台上骗人的。今天这句是第0号，没加混响、没写进剧本，听不清算你活该！"
+        "text": "零音摘了美瞳，重新架上黑框眼镜，把半边有线耳机塞进你耳朵里。里头是一段刚录的木吉他清唱，没有修音，连翻谱的声音都听得清。\n“台上那些话都是哄观众的。这首只唱给你听——没加混响，听不清就拉倒。”",
+        "voice": "game_assets/voices/true_end_reine_00.mp3"
       }
     ]
   },
   "true_end_kohaku": {
     "bg": "rooftop3f",
-    "loc": "3F · 跨年飘雪露台 · 零点烟花",
-    "sub": "🐆 陈琥珀 True End ·《大姐头的专属橘子》",
+    "loc": "3F · 跨年露台",
+    "sub": "陈琥珀结局 ·《剥好的橘子》",
     "lines": [
       {
         "speaker": "陈琥珀",
@@ -884,16 +816,15 @@ window.GAME_STORIES = {
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "（琥珀踢掉厚底靴盘腿坐在藤椅上，看着蹲在面前帮她涂护手霜的你，眼圈微红却扬起下巴）“既然是你自己要把我惯成废人的，那你可得负责到底！以后累了就归你背，橘子也归你剥——快剥一瓣塞我嘴里！”",
-        "voice": "game_assets/voices/true_end_kohaku_00.mp3",
-        "spokenText": "既然是你自己要把我惯成废人的，那你可得负责到底！以后累了就归你背，橘子也归你剥，快剥一瓣塞我嘴里！"
+        "text": "琥珀踢掉靴子盘腿坐在旧藤椅上，低头看你替她往干裂的指节抹护手霜，嘴角压了半天没压住。\n“话先放这儿啊，人是你惯懒的，以后我外婆复查你得跟着去，累了也归你背——行了别笑了，拿个橘子剥给我吃。”",
+        "voice": "game_assets/voices/true_end_kohaku_00.mp3"
       }
     ]
   },
   "true_end_millie": {
     "bg": "rooftop3f",
-    "loc": "3F · 跨年飘雪露台 · 零点烟花",
-    "sub": "👾 苏千禧 True End ·《三次元的唯一存档点》",
+    "loc": "3F · 跨年露台",
+    "sub": "苏千禧结局 ·《留给我的插座》",
     "lines": [
       {
         "speaker": "苏千禧",
@@ -902,27 +833,25 @@ window.GAME_STORIES = {
           "luchen:normal"
         ],
         "speaking": 0,
-        "text": "（千禧摘下猫耳耳机，伸出小拇指轻轻勾住你的衬衫袖口，掌机屏幕上小幽灵正牵着咖啡杯店长）“陆沉……只要你的电源不拔掉，我就再也不会删档逃跑了。以后每一年的跨年，你都要在吧台给我留插座，好不好？”",
-        "voice": "game_assets/voices/true_end_millie_00.mp3",
-        "spokenText": "陆沉……只要你的电源不拔掉，我就再也不会删档逃跑了。以后每一年的跨年，你都要在吧台给我留插座，好不好？"
+        "text": "千禧摘下耳机挂在脖子上，犹豫了两秒，伸出小指轻轻勾住你的袖口。\n“……陆沉，以前我换过四份兼职，每次待不满一个月就删号跑路了。明年吧台最里头那个插座，还留给我好不好？”",
+        "voice": "game_assets/voices/true_end_millie_00.mp3"
       }
     ]
   },
   "wx_mahiru_reply": {
     "bg": "cafe1f",
-    "loc": "深夜出租屋 · 微信私聊秒撤回互动",
-    "sub": "林真昼 亚比精神压力 -35% · 羁绊度上升",
+    "loc": "深夜 · 微信私聊",
+    "sub": "真昼压力 -35% · 羁绊上升",
     "lines": [
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "sprites": [
           "luchen:normal",
           "mahiru:shy"
         ],
         "speaking": 0,
-        "text": "“他眼神不好。你画的那张歪嘴猫我刚拿相框裱起来挂收银台正中间了，本店镇店非卖品。”",
-        "voice": "game_assets/voices/wx_mahiru_reply_00.mp3",
-        "spokenText": "他眼神不好。你画的那张歪嘴猫我刚拿相框裱起来挂收银台正中间了，本店镇店非卖品。"
+        "text": "“他眼光不行。你画的那张歪嘴猫我拿相框装起来挂收银台后头了，只看不卖。”",
+        "voice": "game_assets/voices/wx_mahiru_reply_00.mp3"
       },
       {
         "speaker": "林真昼",
@@ -931,27 +860,25 @@ window.GAME_STORIES = {
           "mahiru:shy"
         ],
         "speaking": 1,
-        "text": "“……你有病吧挂那个干嘛！丑死了，明天早上我去换张画得更好看的挂上去！睡觉了不理你了！”",
-        "voice": "game_assets/voices/wx_mahiru_reply_01.mp3",
-        "spokenText": "……你有病吧挂那个干嘛！丑死了，明天早上我去换张画得更好看的挂上去！睡觉了不理你了！"
+        "text": "“……挂那个干嘛呀，多丢人！明天早上我重新画张顺眼的换上去。困了，不跟你聊了。”",
+        "voice": "game_assets/voices/wx_mahiru_reply_01.mp3"
       }
     ]
   },
   "wx_reine_reply": {
     "bg": "cafe1f",
-    "loc": "深夜出租屋 · 微信私聊深夜关照",
-    "sub": "白石零音 亚比精神压力 -35% · 羁绊度上升",
+    "loc": "深夜 · 微信私聊",
+    "sub": "零音压力 -35% · 羁绊上升",
     "lines": [
       {
-        "speaker": "陆沉（店长）",
+        "speaker": "陆沉",
         "sprites": [
           "luchen:normal",
           "reine:glasses"
         ],
         "speaking": 0,
-        "text": "“大晚上别戴着500度近视眼镜摸黑找糖罐。在出租屋等着，我刚煮了热可可挂你门把手上。”",
-        "voice": "game_assets/voices/wx_reine_reply_00.mp3",
-        "spokenText": "大晚上别戴着500度近视眼镜摸黑找糖罐。在出租屋等着，我刚煮了热可可挂你门把手上。"
+        "text": "“别摸黑找糖罐了，刚煮了杯热可可，十分钟后挂你门把手上。”",
+        "voice": "game_assets/voices/wx_reine_reply_00.mp3"
       },
       {
         "speaker": "白石零音",
@@ -960,9 +887,8 @@ window.GAME_STORIES = {
           "reine:glasses"
         ],
         "speaking": 1,
-        "text": "“……谁让你送了。少放半勺糖，到了敲两下门就行，我没化妆不开门。”",
-        "voice": "game_assets/voices/wx_reine_reply_01.mp3",
-        "spokenText": "……谁让你送了。少放半勺糖，到了敲两下门就行，我没化妆不开门。"
+        "text": "“……少放糖。到了敲两下门就行，我没化妆不开。”",
+        "voice": "game_assets/voices/wx_reine_reply_01.mp3"
       }
     ]
   }

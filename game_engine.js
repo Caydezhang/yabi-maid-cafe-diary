@@ -358,16 +358,16 @@
         choicesEl.appendChild(btn);
       });
     } else if (ln.isPrologueEnd) {
-      nextHintEl.textContent = "▲ 点击画面中央开启首日试营业";
+      nextHintEl.textContent = "▲ 点击画面中央开始第一天营业";
       choicesEl.classList.add("active");
       const title = document.createElement("div");
       title.className = "gal-choices-title";
-      title.textContent = "◆ 序章完结 · 赌约成立 ◆";
+      title.textContent = "◆ 序章完 · 明天开工 ◆";
       choicesEl.appendChild(title);
 
       const btn = document.createElement("button");
       btn.className = "gal-choice-btn primary-cta";
-      btn.textContent = "▶ 签下对赌协议 · 开启首日试营业";
+      btn.textContent = "▶ 收好平板 · 开始第一天试营业";
       btn.onclick = function (ev) {
         ev.stopPropagation();
         window.finishPrologueToTutorial();
@@ -454,19 +454,16 @@
     } else {
       playStory(null, {
         bg: "cafe1f",
-        loc: "1F · 考勤完毕 · 进入①训练",
-        sub: restedNames.length ? `${restedNames.join("、")} 休假（状态已清零）` : "全员满状态出勤",
+        loc: "1F · 早会结束 · 进入①备场",
+        sub: restedNames.length ? `${restedNames.join("、")} 今日休假（状态已清零）` : "今日全员出勤",
         lines: [
           {
-            speaker: "陆沉（店长）",
+            speaker: "陆沉",
             sprites: ["luchen:normal", "kohaku:normal"],
             speaking: 0,
-            voice: restedNames.length
-              ? "game_assets/voices/sys_roster_rest.mp3"
-              : "game_assets/voices/sys_roster_all.mp3",
             text: restedNames.length
-              ? `【${restedNames.join("、")}】今日休假，疲劳与压力已清零！请在右侧选择上午训练方案。`
-              : "今日全员出勤！请在右侧选择上午训练方案。"
+              ? `“${restedNames.join("、")}今天就回去歇着吧，手机关静音。剩下的人准备开早会，看看上午先练哪块。”`
+              : "“人都齐了。离正式开门还有两个钟头，先定一下上午的备场安排。”"
           }
         ]
       });
@@ -534,15 +531,14 @@
       } else {
         playStory(null, {
           bg: "liveB1",
-          loc: "B1 · 演出落幕",
-          sub: `票房 +¥${earned} · 进入④夜生活`,
+          loc: "B1 · 演出结束",
+          sub: `今晚票房 +¥${earned} · 进入④打烊后`,
           lines: [
             {
               speaker: "白石零音",
               sprites: ["reine:normal", "mahiru:normal"],
               speaking: 0,
-              voice: "game_assets/voices/sys_evening_done.mp3",
-              text: `今晚票房入账 ¥${earned}！已到 21:30 打烊时间，请在右侧选择社媒宣发或留店剧情。`
+              text: `零音把麦克风插回支架，顺手拿毛巾擦了把汗。\n“唱完了，今晚门票房大概进了 ¥${earned}。九点半了，楼上准备收摊吧。”`
             }
           ]
         });
@@ -602,8 +598,7 @@
           speaker: "陈琥珀",
           sprites: ["kohaku:normal", "luchen:normal"],
           speaking: 0,
-          voice: "game_assets/voices/sys_new_day.mp3",
-          text: `“早安老板！今天是 ${d.weekLabel}（${d.shortHint || d.title}），先在右侧排班吧！”`
+          text: `“早啊老板！刚顺路买了豆浆油条放吧台了。今天是 ${d.title}，先看看谁要排休吧。”`
         }
       ]
     });
@@ -790,11 +785,11 @@
     let actionBox = "";
     if (state.phase === "roster") {
       const btnHighlight = state.tutorialStep === 1 ? "tut-highlight" : "";
-      const rosterTip = "每天早会可自由切换任意妹妹为【★休假】，休假者当天体力疲劳与精神压力直接 100% 清零！\n\n提示：真昼当前压力较高，可先放假或带她出勤并在晚间留店安慰。";
+      const rosterTip = "早会可以点任意店员右上角设为【★休假】，休假当天疲劳与压力全部清零。\n\n真昼今天压力偏高，可以先放假，或者晚上留店陪她聊聊。";
       actionBox = `
         <div class="op-box">
           <div class="op-title">
-            <span class="op-title-left">0. 今日排班 ${infoTip("反 007 排班说明", rosterTip)}</span>
+            <span class="op-title-left">0. 今日排班 ${infoTip("排班说明", rosterTip)}</span>
             <span class="chip green">休假双清零</span>
           </div>
           <div class="day-event-bar">
@@ -811,20 +806,20 @@
       );
       const phaseMeta = {
         morning: {
-          title: "① 上午训练 (10:00)",
-          tip: "闭店备场时段：快速提升全队四维技能，触发双人师徒搭档小剧场与专属 CG。"
+          title: "① 上午备场 (10:00)",
+          tip: "开门前用来练四项基础能力，顺带触发店员搭档日常和专属 CG。"
         },
         afternoon: {
           title: "② 下午营业 (14:00)",
-          tip: "午市赚钱主力：1F 点餐吃美食力（稳赚不涨压力），2F 拍切吃饭撒力（暴利但涨精神压力）。"
+          tip: "午市赚钱主力：1F 点餐看美食力（稳、不涨压力），2F 拍切看饭撒力（来钱快但容易攒压力）。"
         },
         evening: {
-          title: "③ 晚上演出 (19:00)",
-          tip: "B1 地下舞台：按唱跳力结算票房与粉丝，全员燃曲 Live 还能宣泄白天压力！"
+          title: "③ 晚间演出 (19:00)",
+          tip: "B1 地下舞台：按唱跳力结算票房和粉丝，全员乐队场能顺带消掉白天的闷气。"
         },
         night: {
-          title: "④ 夜生活 (22:00)",
-          tip: "发社媒为明日加成 +35%~45% 收益；点选金色 ★ 留店剧情可彻底清零妹妹压力并看全屏 CG！"
+          title: "④ 打烊后 (22:00)",
+          tip: "发图文或切片给明天引流 +35%～45%；选金色 ★ 留店剧情可直接清零压力并看全屏 CG。"
         }
       };
       const meta = phaseMeta[state.phase] || { title: "经营决策", tip: "" };
@@ -869,37 +864,37 @@
       ${tutBanner}
       <div class="phone-card">
         <div class="op-title">
-          <span class="op-title-left">📱 小红书 · 夜间动态 ${infoTip("小红书动态", "妹妹们下班后发布的营业笔记与暗戳戳的日常切片。")}</span>
+          <span class="op-title-left">📱 小红书 · 夜间动态 ${infoTip("小红书动态", "店员们打烊后发的日常照片和小号碎碎念。")}</span>
         </div>
         <div class="red-post">
           <img src="game_assets/cg_mahiru_rainy_night.jpg" alt="小红书配图">
           <div class="red-body">
             <b style="color:#ff8fb0">@林真昼_Mahiru</b> · 00:18<br>
-            今天拍切排到楼梯口啦，手腕画酸了~（角落不小心拍到店长热的草莓奶）<br>
-            <span style="color:#867a99">#地雷系 #404女仆喫茶</span>
+            今天拍切排到楼梯拐角，手腕写酸了。好在打烊有热草莓奶喝。<br>
+            <span style="color:#867a99">#404女仆喫茶 #下班打卡</span>
           </div>
         </div>
       </div>
 
       <div id="wx-reply-box" class="phone-card ${wxHighlight}">
         <div class="op-title">
-          <span class="op-title-left">💬 微信私聊 ${infoTip("微信秒撤回减压", "白天攒了压力的妹妹半夜会发疯又秒撤回。选懂她电波的回复可立消 -35% 精神压力并大幅提升羁绊！")}</span>
+          <span class="op-title-left">💬 微信私聊 ${infoTip("睡前回复", "压力大的店员半夜常发消息又秒撤回。顺着聊一句能减 35% 压力并涨羁绊。")}</span>
           <span class="chip green">回复减压 -35%</span>
         </div>
         <div class="wx-bubble recall">“真昼🍓” 撤回了一条消息 (01:15)</div>
-        <div class="wx-bubble"><b>真昼🍓：</b>刚才有客人说我画的歪嘴猫不如隔壁圆……明天拍切换别人吧。</div>
+        <div class="wx-bubble"><b>真昼🍓：</b>刚才有客人说我画的歪嘴猫不如隔壁圆……明天拍切换别人顶吧。</div>
         <div class="op-list" style="margin-top:8px">
-          <button class="op-btn special" onclick="replyWeChat('mahiru', 35, '他眼神不好。你画的那张歪嘴猫我刚拿相框裱起来挂收银台正中间了，本店镇店非卖品。', '“……你有病吧挂那个干嘛！丑死了，明天早上我去换张画得更好看的挂上去！睡觉了不理你了！”（真昼精神压力 -35%）')">
+          <button class="op-btn special" onclick="replyWeChat('mahiru', 35, '他眼光不行。你画的那张歪嘴猫我拿相框装起来挂收银台后头了，只看不卖。', '')">
             <div class="op-btn-row">
               <b>▶ 回复真昼：把歪嘴猫裱起来</b>
-              ${infoTip("回复内容预览", "“他眼神不好。你画的那张歪嘴猫我刚拿相框裱起来挂收银台正中间了，本店镇店非卖品。”")}
+              ${infoTip("回复预览", "“他眼光不行。你画的那张歪嘴猫我拿相框装起来挂收银台后头了，只看不卖。”")}
             </div>
             <div class="op-chips"><span class="chip green">真昼压力 -35%</span><span class="chip pink">羁绊 +10</span></div>
           </button>
-          <button class="op-btn" onclick="replyWeChat('reine', 35, '大晚上别戴着500度近视眼镜摸黑找糖罐。在出租屋等着，我刚煮了热可可挂你门把手上。', '“……谁让你送了。少放半勺糖，到了敲两下门就行，我没化妆不开门。”（零音精神压力 -35%）')">
+          <button class="op-btn" onclick="replyWeChat('reine', 35, '别摸黑找糖罐了，刚煮了杯热可可，十分钟后挂你门把手上。', '')">
             <div class="op-btn-row">
-              <b>▶ 回复零音：深夜送热可可</b>
-              ${infoTip("回复内容预览", "“大晚上别戴着500度近视眼镜摸黑找糖罐。在出租屋等着，我刚煮了热可可挂你门把手上。”")}
+              <b>▶ 回复零音：顺路送热可可</b>
+              ${infoTip("回复预览", "“别摸黑找糖罐了，刚煮了杯热可可，十分钟后挂你门把手上。”")}
             </div>
             <div class="op-chips"><span class="chip green">零音压力 -35%</span><span class="chip pink">羁绊 +10</span></div>
           </button>
@@ -929,27 +924,27 @@
         <div class="op-title"><span class="op-title-left">🎬 序章与教学</span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
           <button class="op-btn special" onclick="startGameMode('prologue')">
-            <div class="op-btn-row"><b>▶ 重播序章</b>${infoTip("序章剧情", "重温陆沉大厂裸辞、雨夜接店与初遇四位亚比妹妹的完整开篇。")}</div>
+            <div class="op-btn-row"><b>▶ 重播序章</b>${infoTip("序章剧情", "重新看一遍陆沉裸辞、雨夜接店和初遇四位店员的开篇。")}</div>
           </button>
           <button class="op-btn" onclick="startGameMode('tutorial')">
-            <div class="op-btn-row"><b>📘 首日教学</b>${infoTip("首日教学", "从第 1 天重新开启 6 步互动经营引导。")}</div>
+            <div class="op-btn-row"><b>📘 首日教学</b>${infoTip("首日教学", "从第 1 天重新开始 6 步经营引导。")}</div>
           </button>
         </div>
       </div>
       <div class="op-box">
         <div class="op-title">
-          <span class="op-title-left">🌸 跨年露台 True End ${infoTip("单人结局直达", "直接体验跨年千人 Live 结束后，3F 露台烟花下的四女主单人 True End 告白剧情。")}</span>
+          <span class="op-title-left">🌸 跨年露台结局 ${infoTip("结局直达", "直接看跨年演出结束后，三楼露台上的四位店员个人结局。")}</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-          <button class="op-btn special" onclick="triggerTrueEnd('mahiru')"><div class="op-btn-row"><b>真昼 End</b>${infoTip("林真昼 True End", "《备用钥匙与 99 分》：深夜烟花下交出 404 的猫咪黄铜钥匙。")}</div></button>
-          <button class="op-btn special" onclick="triggerTrueEnd('reine')"><div class="op-btn-row"><b>零音 End</b>${infoTip("白石零音 True End", "《第 0 号真话》：摘下舞台面具后，写给第 0 号观众的歌。")}</div></button>
-          <button class="op-btn special" onclick="triggerTrueEnd('kohaku')"><div class="op-btn-row"><b>琥珀 End</b>${infoTip("陈琥珀 True End", "《专属砂糖橘》：终于肯靠在别人肩上喊累的大姐头。")}</div></button>
-          <button class="op-btn special" onclick="triggerTrueEnd('millie')"><div class="op-btn-row"><b>千禧 End</b>${infoTip("苏千禧 True End", "《永久存档点》：走出吧台隐私帘，把现实设为永不回档的主线。")}</div></button>
+          <button class="op-btn special" onclick="triggerTrueEnd('mahiru')"><div class="op-btn-row"><b>真昼结局</b>${infoTip("林真昼结局", "《99 分与备用钥匙》：零点烟花下，故意算少的那五块钱。")}</div></button>
+          <button class="op-btn special" onclick="triggerTrueEnd('reine')"><div class="op-btn-row"><b>零音结局</b>${infoTip("白石零音结局", "《不加混响》：摘掉舞台美瞳后，只唱给一个人的木吉他清唱。")}</div></button>
+          <button class="op-btn special" onclick="triggerTrueEnd('kohaku')"><div class="op-btn-row"><b>琥珀结局</b>${infoTip("陈琥珀结局", "《剥好的橘子》：难得肯歇下来、靠在藤椅上喊累的大姐头。")}</div></button>
+          <button class="op-btn special" onclick="triggerTrueEnd('millie')"><div class="op-btn-row"><b>千禧结局</b>${infoTip("苏千禧结局", "《留给我的插座》：决定不再删号跑路，留在吧台最里头的女孩。")}</div></button>
         </div>
       </div>
       <div class="op-box">
         <div class="op-title">
-          <span class="op-title-left">📅 五幕主线日程直达 ${infoTip("日程跳转", "点击任意关键日程直接跳转，悬停右侧感叹号可预览该日高潮剧情与限定企划。")}</span>
+          <span class="op-title-left">📅 关键日程跳转 ${infoTip("日程跳转", "点击任意日期直接跳转，悬停右侧感叹号可看当日剧情简介。")}</span>
         </div>
         <div class="op-list">${chList}</div>
       </div>`;
