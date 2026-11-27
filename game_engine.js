@@ -41,8 +41,7 @@
     applyStageView(viewMode);
   };
 
-  const voicePlayer = new Audio();
-  voicePlayer.preload = "auto";
+  // Voice playback currently disabled (local TTS mp3 assets retained offline)
 
   // ==================== FLOATING (!) TOOLTIP ENGINE ====================
   function escAttr(str) {
@@ -148,74 +147,24 @@
     });
   }
 
-  function updateVoiceUi(isPlaying) {
+  const VOICE_ENABLED = false;
+
+  function updateVoiceUi() {
     const vBtn = document.getElementById("gal-voice-btn");
-    const vLabel = document.getElementById("gal-voice-label");
-    const hudBtn = document.getElementById("hud-voice-btn");
-    if (hudBtn) {
-      hudBtn.textContent = state.voiceMuted ? "🔇 静音" : "🔊 配音";
-    }
-    if (!vBtn || !vLabel) return;
-    if (!state.currentVoiceUrl) {
-      vBtn.style.display = "none";
-      return;
-    }
-    vBtn.style.display = "inline-flex";
-    if (state.voiceMuted) {
-      vBtn.classList.remove("playing");
-      vLabel.textContent = "已静音";
-    } else if (isPlaying) {
-      vBtn.classList.add("playing");
-      vLabel.textContent = "配音中";
-    } else {
-      vBtn.classList.remove("playing");
-      vLabel.textContent = "重播";
-    }
+    if (vBtn) vBtn.style.display = "none";
   }
 
-  voicePlayer.addEventListener("play", () => updateVoiceUi(true));
-  voicePlayer.addEventListener("ended", () => updateVoiceUi(false));
-  voicePlayer.addEventListener("pause", () => updateVoiceUi(false));
-
-  function playVoiceClip(url) {
-    state.currentVoiceUrl = url || null;
-    try {
-      voicePlayer.pause();
-      voicePlayer.currentTime = 0;
-    } catch (e) {}
-    if (!url || state.voiceMuted || state.mode === "title") {
-      updateVoiceUi(false);
-      return;
-    }
-    voicePlayer.src = url;
-    voicePlayer.play().catch(() => {
-      updateVoiceUi(false);
-    });
+  function playVoiceClip() {
+    // TTS voice playback disabled (local voice assets retained offline only)
+    state.currentVoiceUrl = null;
+    updateVoiceUi();
   }
 
   window.replayCurrentVoice = function (ev) {
     if (ev) ev.stopPropagation();
-    if (state.voiceMuted) {
-      state.voiceMuted = false;
-    }
-    if (state.currentVoiceUrl) {
-      playVoiceClip(state.currentVoiceUrl);
-    }
   };
 
-  window.toggleVoiceMute = function () {
-    state.voiceMuted = !state.voiceMuted;
-    if (state.voiceMuted) {
-      try {
-        voicePlayer.pause();
-      } catch (e) {}
-      updateVoiceUi(false);
-    } else if (state.currentVoiceUrl) {
-      playVoiceClip(state.currentVoiceUrl);
-    } else {
-      updateVoiceUi(false);
-    }
-  };
+  window.toggleVoiceMute = function () {};
 
   function curDay() {
     return D.calendar[state.dayIdx] || D.calendar[0];
@@ -227,7 +176,7 @@
       window.CAFE_SIM_3D.init(".stage-wrap");
     }
     if (window.LIVE2D_STAGE) {
-      window.LIVE2D_STAGE.init(".stage-wrap", voicePlayer);
+      window.LIVE2D_STAGE.init(".stage-wrap");
     }
     applyStageView("l2d");
     renderAll();
