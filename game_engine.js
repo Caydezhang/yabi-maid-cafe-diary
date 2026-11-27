@@ -383,13 +383,20 @@
       if (i >= full.length) clearInterval(state.typingTimer);
     }, 14);
 
-    // Render interactive dialogue choices or prologue completion button
+    // Render interactive dialogue choices or prologue completion button in centered Galgame overlay
     const choicesEl = document.getElementById("gal-choices");
     const nextHintEl = document.getElementById("gal-next-hint");
     choicesEl.innerHTML = "";
+    choicesEl.classList.remove("active");
 
     if (ln.choices && ln.choices.length) {
-      nextHintEl.textContent = "▲ 请选择回应";
+      nextHintEl.textContent = "▲ 请在画面中央做出选择";
+      choicesEl.classList.add("active");
+      const title = document.createElement("div");
+      title.className = "gal-choices-title";
+      title.textContent = "◆ 请做出选择 ◆";
+      choicesEl.appendChild(title);
+
       ln.choices.forEach((ch) => {
         const btn = document.createElement("button");
         btn.className = "gal-choice-btn";
@@ -402,9 +409,15 @@
         choicesEl.appendChild(btn);
       });
     } else if (ln.isPrologueEnd) {
-      nextHintEl.textContent = "▲ 点击开启首日试营业";
+      nextHintEl.textContent = "▲ 点击画面中央开启首日试营业";
+      choicesEl.classList.add("active");
+      const title = document.createElement("div");
+      title.className = "gal-choices-title";
+      title.textContent = "◆ 序章完结 · 赌约成立 ◆";
+      choicesEl.appendChild(title);
+
       const btn = document.createElement("button");
-      btn.className = "gal-choice-btn";
+      btn.className = "gal-choice-btn primary-cta";
       btn.textContent = "▶ 签下对赌协议 · 开启首日试营业";
       btn.onclick = function (ev) {
         ev.stopPropagation();
